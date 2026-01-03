@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { Search, TrendingDown, TrendingUp } from 'lucide-react';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
@@ -33,6 +34,8 @@ const searchCryptos = async (query: string): Promise<CoinData[]> => {
 
 const TopCryptos = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
 
   const { data: topCryptos, isLoading } = useQuery({
     queryKey: ['topCryptos'],
@@ -113,7 +116,8 @@ const TopCryptos = () => {
                 return (
                   <tr
                     key={coin.id}
-                    className="border-b border-border/50 hover:bg-secondary/50 transition-colors"
+                    onClick={() => navigate(`/coin/${coin.id}`)}
+                    className="border-b border-border/50 hover:bg-secondary/50 transition-colors cursor-pointer"
                   >
                     <td className="py-4 text-muted-foreground">{index + 1}</td>
                     <td className="py-4">
