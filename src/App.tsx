@@ -6,10 +6,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { WalletProvider } from "@/contexts/WalletContext";
+import { WatchlistProvider } from "@/contexts/WatchlistContext";
+import { PortfolioProvider } from "@/contexts/PortfolioContext";
 import PriceAlertProvider from "@/components/PriceAlertProvider";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import CoinDetail from "./pages/CoinDetail";
+import Portfolio from "./pages/Portfolio";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -19,20 +22,25 @@ const App = () => (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
       <AuthProvider>
         <WalletProvider>
-          <PriceAlertProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/coin/:coinId" element={<CoinDetail />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </BrowserRouter>
-            </TooltipProvider>
-          </PriceAlertProvider>
+          <WatchlistProvider>
+            <PortfolioProvider>
+              <PriceAlertProvider>
+                <TooltipProvider>
+                  <Toaster />
+                  <Sonner />
+                  <BrowserRouter>
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/coin/:coinId" element={<CoinDetail />} />
+                      <Route path="/portfolio" element={<Portfolio />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </BrowserRouter>
+                </TooltipProvider>
+              </PriceAlertProvider>
+            </PortfolioProvider>
+          </WatchlistProvider>
         </WalletProvider>
       </AuthProvider>
     </ThemeProvider>

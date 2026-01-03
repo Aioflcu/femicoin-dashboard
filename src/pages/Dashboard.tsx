@@ -6,6 +6,7 @@ import WalletOverview from '@/components/dashboard/WalletOverview';
 import TopCryptos from '@/components/dashboard/TopCryptos';
 import QuickActions from '@/components/dashboard/QuickActions';
 import TransactionHistory from '@/components/dashboard/TransactionHistory';
+import WatchlistSection from '@/components/dashboard/WatchlistSection';
 import NewsSection from '@/components/dashboard/NewsSection';
 import Footer from '@/components/dashboard/Footer';
 
@@ -38,6 +39,8 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {/* Watchlist */}
+        <WatchlistSection />
         {/* Middle Row: Top Cryptos + Transactions */}
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">

@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { Search, TrendingDown, TrendingUp } from 'lucide-react';
+import { Search, Star, TrendingDown, TrendingUp } from 'lucide-react';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
+import { useWatchlist } from '@/contexts/WatchlistContext';
 
 interface CoinData {
   id: string;
@@ -35,7 +36,7 @@ const searchCryptos = async (query: string): Promise<CoinData[]> => {
 const TopCryptos = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-
+  const { isInWatchlist, toggleWatchlist } = useWatchlist();
 
   const { data: topCryptos, isLoading } = useQuery({
     queryKey: ['topCryptos'],
@@ -103,6 +104,7 @@ const TopCryptos = () => {
           <table className="w-full">
             <thead>
               <tr className="text-left text-sm text-muted-foreground border-b border-border">
+                <th className="pb-3 font-medium w-10"></th>
                 <th className="pb-3 font-medium">#</th>
                 <th className="pb-3 font-medium">Coin</th>
                 <th className="pb-3 font-medium text-right">Price</th>
@@ -113,12 +115,26 @@ const TopCryptos = () => {
             <tbody>
               {displayData?.map((coin, index) => {
                 const isPositive = coin.price_change_percentage_24h >= 0;
+                const isWatched = isInWatchlist(coin.id);
                 return (
                   <tr
                     key={coin.id}
                     onClick={() => navigate(`/coin/${coin.id}`)}
                     className="border-b border-border/50 hover:bg-secondary/50 transition-colors cursor-pointer"
                   >
+                    <td className="py-4">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleWatchlist(coin.id);
+                        }}
+                        className="p-1 hover:scale-110 transition-transform"
+                      >
+                        <Star
+                          className={`w-4 h-4 ${isWatched ? 'fill-primary text-primary' : 'text-muted-foreground'}`}
+                        />
+                      </button>
+                    </td>
                     <td className="py-4 text-muted-foreground">{index + 1}</td>
                     <td className="py-4">
                       <div className="flex items-center gap-3">

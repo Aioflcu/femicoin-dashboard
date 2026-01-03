@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/AuthContext';
+import { useWatchlist } from '@/contexts/WatchlistContext';
 import Header from '@/components/dashboard/Header';
 import Footer from '@/components/dashboard/Footer';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, TrendingUp, TrendingDown, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Star, TrendingUp, TrendingDown, ExternalLink } from 'lucide-react';
 import {
   AreaChart,
   Area,
@@ -84,7 +85,10 @@ const CoinDetail = () => {
   const { coinId } = useParams<{ coinId: string }>();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const { isInWatchlist, toggleWatchlist } = useWatchlist();
   const [selectedRange, setSelectedRange] = useState(7);
+  
+  const isWatched = coinId ? isInWatchlist(coinId) : false;
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -186,6 +190,15 @@ const CoinDetail = () => {
                 </div>
 
                 <div className="flex gap-2">
+                  <Button
+                    variant={isWatched ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => coinId && toggleWatchlist(coinId)}
+                    className={isWatched ? 'bg-primary' : ''}
+                  >
+                    <Star className={`w-4 h-4 mr-1 ${isWatched ? 'fill-current' : ''}`} />
+                    {isWatched ? 'Watching' : 'Watch'}
+                  </Button>
                   {coin.links.homepage[0] && (
                     <Button variant="outline" size="sm" asChild>
                       <a href={coin.links.homepage[0]} target="_blank" rel="noopener noreferrer">
