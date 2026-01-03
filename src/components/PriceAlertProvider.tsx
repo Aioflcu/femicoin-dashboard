@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from '@/hooks/use-toast';
 import { TrendingUp, TrendingDown } from 'lucide-react';
+import { useSettings } from '@/contexts/SettingsContext';
 
 interface CoinPrice {
   id: string;
@@ -9,7 +10,6 @@ interface CoinPrice {
   price_change_percentage_24h: number;
 }
 
-const ALERT_THRESHOLD = 5; // 5% change
 const ALERT_COOLDOWN = 300000; // 5 minutes between alerts for same coin
 
 const fetchPriceAlerts = async (): Promise<CoinPrice[]> => {
@@ -22,23 +22,25 @@ const fetchPriceAlerts = async (): Promise<CoinPrice[]> => {
 
 const PriceAlertProvider = ({ children }: { children: React.ReactNode }) => {
   const lastAlertTime = useRef<Record<string, number>>({});
+  const { settings } = useSettings();
 
   const { data: prices } = useQuery({
     queryKey: ['priceAlerts'],
     queryFn: fetchPriceAlerts,
     refetchInterval: 60000, // Check every minute
     staleTime: 30000,
+    enabled: settings.priceAlerts && settings.notificationsEnabled,
   });
 
   useEffect(() => {
-    if (!prices) return;
+    if (!prices || !settings.priceAlerts || !settings.notificationsEnabled) return;
 
     prices.forEach((coin) => {
       const absChange = Math.abs(coin.price_change_percentage_24h);
       const lastAlert = lastAlertTime.current[coin.id] || 0;
       const now = Date.now();
 
-      if (absChange >= ALERT_THRESHOLD && now - lastAlert > ALERT_COOLDOWN) {
+      if (absChange >= settings.alertThreshold && now - lastAlert > ALERT_COOLDOWN) {
         const isUp = coin.price_change_percentage_24h > 0;
         
         toast({
@@ -59,7 +61,7 @@ const PriceAlertProvider = ({ children }: { children: React.ReactNode }) => {
         lastAlertTime.current[coin.id] = now;
       }
     });
-  }, [prices]);
+  }, [prices, settings.alertThreshold, settings.priceAlerts, settings.notificationsEnabled]);
 
   return <>{children}</>;
 };

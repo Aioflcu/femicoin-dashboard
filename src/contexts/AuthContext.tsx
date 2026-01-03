@@ -14,13 +14,13 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const VALID_CREDENTIALS = {
-  username: 'admin',
-  password: '1234',
+  username: 'Bryanvoth',
+  password: 'xgbto1234',
 };
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
-    const saved = localStorage.getItem('femicoin_user');
+    const saved = localStorage.getItem('wicn_user');
     return saved ? JSON.parse(saved) : null;
   });
 
@@ -28,7 +28,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password) {
       const userData = { username };
       setUser(userData);
-      localStorage.setItem('femicoin_user', JSON.stringify(userData));
+      localStorage.setItem('wicn_user', JSON.stringify(userData));
       return true;
     }
     return false;
@@ -36,7 +36,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('femicoin_user');
+    localStorage.removeItem('wicn_user');
   };
 
   return (
