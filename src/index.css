@@ -6,6 +6,63 @@
 
 @layer base {
   :root {
+    --background: 45 20% 97%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 45 93% 42%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 92%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 220 14% 92%;
+    --muted-foreground: 220 8% 46%;
+
+    --accent: 45 93% 42%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 11%;
+
+    --border: 220 13% 87%;
+    --input: 220 13% 87%;
+    --ring: 45 93% 42%;
+
+    --radius: 0.75rem;
+
+    --chart-positive: 142 76% 36%;
+    --chart-negative: 0 84% 60%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 45 93% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 92%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 220 13% 87%;
+    --sidebar-ring: 45 93% 42%;
+
+    --gradient-gold: linear-gradient(135deg, hsl(45 93% 42%), hsl(38 92% 50%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(45 20% 97%));
+    --gradient-hero: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(45 20% 95%) 100%);
+
+    --shadow-glow: 0 0 40px hsl(45 93% 42% / 0.15);
+    --shadow-card: 0 4px 24px hsl(220 13% 50% / 0.1);
+  }
+
+  .dark {
     --background: 222 47% 6%;
     --foreground: 210 40% 98%;
 
@@ -40,8 +97,6 @@
     --input: 222 47% 15%;
     --ring: 45 93% 47%;
 
-    --radius: 0.75rem;
-
     --chart-positive: 142 76% 45%;
     --chart-negative: 0 84% 60%;
 
@@ -61,16 +116,11 @@
     --shadow-glow: 0 0 40px hsl(45 93% 47% / 0.15);
     --shadow-card: 0 4px 24px hsl(0 0% 0% / 0.3);
   }
-
-  .dark {
-    --background: 222 47% 6%;
-    --foreground: 210 40% 98%;
-  }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border transition-colors duration-200;
   }
 
   body {

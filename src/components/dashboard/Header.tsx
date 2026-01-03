@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Bell, ChevronDown, Coins, Globe, LogOut, Settings, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import ThemeToggle from '@/components/ThemeToggle';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -65,6 +66,9 @@ const Header = () => {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+
+          {/* Theme Toggle */}
+          <ThemeToggle />
 
           {/* Notifications */}
           <Button variant="ghost" size="icon" className="relative">
