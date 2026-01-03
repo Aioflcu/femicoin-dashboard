@@ -8,11 +8,13 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { WalletProvider } from "@/contexts/WalletContext";
 import { WatchlistProvider } from "@/contexts/WatchlistContext";
 import { PortfolioProvider } from "@/contexts/PortfolioContext";
+import { SettingsProvider } from "@/contexts/SettingsContext";
 import PriceAlertProvider from "@/components/PriceAlertProvider";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import CoinDetail from "./pages/CoinDetail";
 import Portfolio from "./pages/Portfolio";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,27 +23,30 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
       <AuthProvider>
-        <WalletProvider>
-          <WatchlistProvider>
-            <PortfolioProvider>
-              <PriceAlertProvider>
-                <TooltipProvider>
-                  <Toaster />
-                  <Sonner />
-                  <BrowserRouter>
-                    <Routes>
-                      <Route path="/" element={<Index />} />
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/coin/:coinId" element={<CoinDetail />} />
-                      <Route path="/portfolio" element={<Portfolio />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </BrowserRouter>
-                </TooltipProvider>
-              </PriceAlertProvider>
-            </PortfolioProvider>
-          </WatchlistProvider>
-        </WalletProvider>
+        <SettingsProvider>
+          <WalletProvider>
+            <WatchlistProvider>
+              <PortfolioProvider>
+                <PriceAlertProvider>
+                  <TooltipProvider>
+                    <Toaster />
+                    <Sonner />
+                    <BrowserRouter>
+                      <Routes>
+                        <Route path="/" element={<Index />} />
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/coin/:coinId" element={<CoinDetail />} />
+                        <Route path="/portfolio" element={<Portfolio />} />
+                        <Route path="/settings" element={<Settings />} />
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </BrowserRouter>
+                  </TooltipProvider>
+                </PriceAlertProvider>
+              </PortfolioProvider>
+            </WatchlistProvider>
+          </WalletProvider>
+        </SettingsProvider>
       </AuthProvider>
     </ThemeProvider>
   </QueryClientProvider>

@@ -25,8 +25,8 @@ const Login = () => {
     
     if (success) {
       toast({
-        title: "Welcome back!",
-        description: "Successfully logged in to FemiCoin",
+        title: "Welcome back, Bryan!",
+        description: "Successfully logged in to WICN",
       });
       navigate('/dashboard');
     } else {
@@ -50,13 +50,14 @@ const Login = () => {
       <div className="w-full max-w-md relative z-10">
         {/* Logo */}
         <div className="text-center mb-8 animate-fade-in">
-          <div className="inline-flex items-center gap-3 mb-2">
+          <div className="inline-flex items-center gap-3 mb-4">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-warning flex items-center justify-center shadow-lg glow-effect">
               <Coins className="w-8 h-8 text-primary-foreground" />
             </div>
-            <h1 className="text-4xl font-display font-bold text-gradient">FemiCoin</h1>
           </div>
-          <p className="text-muted-foreground">Your Gateway to Crypto</p>
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-gradient leading-tight">WORLDWIDE INVESTMENT</h1>
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-gradient leading-tight">COMPENSATION NETWORK</h1>
+          <p className="text-muted-foreground mt-2">WICN - Your Gateway to Crypto</p>
         </div>
 
         {/* Login Card */}
@@ -117,7 +118,7 @@ const Login = () => {
           </form>
 
           <p className="text-center text-sm text-muted-foreground mt-6">
-            Demo credentials: <span className="text-foreground">admin</span> / <span className="text-foreground">1234</span>
+            Welcome, Bryan Voth
           </p>
         </div>
 

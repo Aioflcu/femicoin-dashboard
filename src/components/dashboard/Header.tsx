@@ -39,7 +39,7 @@ const Header = () => {
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-warning flex items-center justify-center shadow-lg">
             <Coins className="w-6 h-6 text-primary-foreground" />
           </div>
-          <span className="text-xl font-display font-bold text-gradient hidden sm:block">FemiCoin</span>
+          <span className="text-xl font-display font-bold text-gradient hidden sm:block">WICN</span>
         </div>
 
         {/* Right side */}
@@ -94,7 +94,7 @@ const Header = () => {
                 <User className="w-4 h-4 mr-2" />
                 Profile
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/settings')}>
                 <Settings className="w-4 h-4 mr-2" />
                 Settings
               </DropdownMenuItem>
