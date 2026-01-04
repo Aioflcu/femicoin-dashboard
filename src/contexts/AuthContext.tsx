@@ -1,7 +1,13 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
+interface UserProfile {
+  displayName: string;
+  profilePicture: string;
+}
+
 interface User {
   username: string;
+  profile: UserProfile;
 }
 
 interface AuthContextType {
@@ -9,6 +15,7 @@ interface AuthContextType {
   login: (username: string, password: string) => boolean;
   logout: () => void;
   isAuthenticated: boolean;
+  updateProfile: (profile: Partial<UserProfile>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -16,6 +23,11 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const VALID_CREDENTIALS = {
   username: 'Bryanvoth',
   password: 'xgbto1234',
+};
+
+const DEFAULT_PROFILE: UserProfile = {
+  displayName: 'Bryan Voth',
+  profilePicture: '',
 };
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -26,7 +38,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = (username: string, password: string): boolean => {
     if (username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password) {
-      const userData = { username };
+      const savedProfile = localStorage.getItem('wicn_profile');
+      const profile = savedProfile ? JSON.parse(savedProfile) : DEFAULT_PROFILE;
+      const userData = { username, profile };
       setUser(userData);
       localStorage.setItem('wicn_user', JSON.stringify(userData));
       return true;
@@ -39,8 +53,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.removeItem('wicn_user');
   };
 
+  const updateProfile = (profileUpdate: Partial<UserProfile>) => {
+    if (user) {
+      const updatedProfile = { ...user.profile, ...profileUpdate };
+      const updatedUser = { ...user, profile: updatedProfile };
+      setUser(updatedUser);
+      localStorage.setItem('wicn_user', JSON.stringify(updatedUser));
+      localStorage.setItem('wicn_profile', JSON.stringify(updatedProfile));
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );
