@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
 import { useWatchlist } from '@/contexts/WatchlistContext';
+import { fetchWithApiKey } from '@/lib/coingecko';
 
 interface CoinData {
   id: string;
@@ -17,20 +18,20 @@ interface CoinData {
 }
 
 const fetchTopCryptos = async (): Promise<CoinData[]> => {
-  const response = await fetch(
+  return fetchWithApiKey(
     'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=true&price_change_percentage=24h'
   );
-  if (!response.ok) throw new Error('Failed to fetch crypto data');
-  return response.json();
 };
 
 const searchCryptos = async (query: string): Promise<CoinData[]> => {
   if (!query) return [];
-  const response = await fetch(
-    `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${query.toLowerCase()}&sparkline=true`
-  );
-  if (!response.ok) return [];
-  return response.json();
+  try {
+    return await fetchWithApiKey(
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${query.toLowerCase()}&sparkline=true`
+    );
+  } catch {
+    return [];
+  }
 };
 
 const TopCryptos = () => {

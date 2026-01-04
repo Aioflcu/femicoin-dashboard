@@ -8,6 +8,9 @@ import QuickActions from '@/components/dashboard/QuickActions';
 import TransactionHistory from '@/components/dashboard/TransactionHistory';
 import WatchlistSection from '@/components/dashboard/WatchlistSection';
 import NewsSection from '@/components/dashboard/NewsSection';
+import MarketStats from '@/components/dashboard/MarketStats';
+import TrendingCoins from '@/components/dashboard/TrendingCoins';
+import TopGainersLosers from '@/components/dashboard/TopGainersLosers';
 import Footer from '@/components/dashboard/Footer';
 
 const Dashboard = () => {
@@ -39,20 +42,30 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {/* Market Overview */}
+        <MarketStats />
+
         {/* Watchlist */}
         <WatchlistSection />
-        {/* Middle Row: Top Cryptos + Transactions */}
+
+        {/* Middle Row: Top Cryptos + Trending */}
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
             <TopCryptos />
           </div>
           <div>
-            <TransactionHistory />
+            <TrendingCoins />
           </div>
         </div>
 
-        {/* Bottom Row: News */}
-        <NewsSection />
+        {/* Top Movers */}
+        <TopGainersLosers />
+
+        {/* Transactions + News */}
+        <div className="grid lg:grid-cols-2 gap-6">
+          <TransactionHistory />
+          <NewsSection />
+        </div>
       </main>
 
       <Footer />

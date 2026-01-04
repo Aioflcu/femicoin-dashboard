@@ -9,17 +9,6 @@ import AddTradeModal from '@/components/portfolio/AddTradeModal';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Plus, TrendingUp, TrendingDown, Trash2, Briefcase } from 'lucide-react';
 import { format } from 'date-fns';
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-} from 'recharts';
 
 const COLORS = ['#F59E0B', '#3B82F6', '#10B981', '#8B5CF6', '#EC4899', '#06B6D4', '#EF4444', '#84CC16'];
 
@@ -137,90 +126,35 @@ const Portfolio = () => {
               </div>
             </div>
 
-            {/* Holdings and Chart */}
-            <div className="grid lg:grid-cols-3 gap-6">
-              {/* Holdings List */}
-              <div className="lg:col-span-2 glass-card rounded-2xl p-6 animate-fade-in" style={{ animationDelay: '0.15s' }}>
-                <h2 className="text-xl font-display font-semibold mb-4">Holdings</h2>
-                <div className="space-y-3">
-                  {holdingsWithCurrentValue.map((holding, index) => (
-                    <div
-                      key={holding.coinId}
-                      onClick={() => navigate(`/coin/${holding.coinId}`)}
-                      className="flex items-center justify-between p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors cursor-pointer"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div
-                          className="w-3 h-3 rounded-full"
-                          style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                        />
-                        <div>
-                          <p className="font-medium">{holding.coinName}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {holding.totalAmount.toLocaleString('en-US', { maximumFractionDigits: 6 })} {holding.coinSymbol}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-medium">
-                          ${holding.currentValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                        </p>
-                        <p className={`text-sm flex items-center justify-end gap-1 ${holding.pnl >= 0 ? 'text-success' : 'text-destructive'}`}>
-                          {holding.pnl >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                          {holding.pnl >= 0 ? '+' : ''}{holding.pnlPercent.toFixed(2)}%
+            {/* Holdings List */}
+            <div className="glass-card rounded-2xl p-6 animate-fade-in" style={{ animationDelay: '0.15s' }}>
+              <h2 className="text-xl font-display font-semibold mb-4">Holdings</h2>
+              <div className="space-y-3">
+                {holdingsWithCurrentValue.map((holding) => (
+                  <div
+                    key={holding.coinId}
+                    onClick={() => navigate(`/coin/${holding.coinId}`)}
+                    className="flex items-center justify-between p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors cursor-pointer"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div>
+                        <p className="font-medium">{holding.coinName}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {holding.totalAmount.toLocaleString('en-US', { maximumFractionDigits: 6 })} {holding.coinSymbol}
                         </p>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Allocation Chart */}
-              <div className="glass-card rounded-2xl p-6 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                <h2 className="text-xl font-display font-semibold mb-4">Allocation</h2>
-                <div className="h-48">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={pieData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={50}
-                        outerRadius={80}
-                        paddingAngle={3}
-                        dataKey="value"
-                      >
-                        {pieData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip
-                        content={({ active, payload }) => {
-                          if (active && payload && payload.length) {
-                            const percent = ((Number(payload[0].value) / totalCurrentValue) * 100).toFixed(1);
-                            return (
-                              <div className="bg-popover border border-border rounded-lg px-3 py-2 shadow-lg">
-                                <p className="font-medium">{payload[0].name}</p>
-                                <p className="text-sm text-muted-foreground">
-                                  ${Number(payload[0].value).toLocaleString()} ({percent}%)
-                                </p>
-                              </div>
-                            );
-                          }
-                          return null;
-                        }}
-                      />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="grid grid-cols-2 gap-2 mt-4">
-                  {pieData.map((item) => (
-                    <div key={item.name} className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                      <span className="text-xs text-muted-foreground">{item.name}</span>
+                    <div className="text-right">
+                      <p className="font-medium">
+                        ${holding.currentValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </p>
+                      <p className={`text-sm flex items-center justify-end gap-1 ${holding.pnl >= 0 ? 'text-success' : 'text-destructive'}`}>
+                        {holding.pnl >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                        {holding.pnl >= 0 ? '+' : ''}{holding.pnlPercent.toFixed(2)}%
+                      </p>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
 

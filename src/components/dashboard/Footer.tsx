@@ -1,21 +1,22 @@
 import { Coins } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const footerLinks = {
   company: [
-    { label: 'About', href: '#' },
-    { label: 'FAQs', href: '#' },
-    { label: 'Support', href: '#' },
+    { label: 'About', href: '/about' },
+    { label: 'FAQs', href: '/faq' },
+    { label: 'Support', href: 'mailto:support@wicn.com' },
   ],
   legal: [
-    { label: 'Privacy Policy', href: '#' },
-    { label: 'Terms & Conditions', href: '#' },
+    { label: 'Privacy Policy', href: '/privacy' },
+    { label: 'Terms & Conditions', href: '/terms' },
   ],
 };
 
 const socialLinks = [
-  { label: 'Twitter', icon: 'X', href: '#' },
-  { label: 'Telegram', icon: 'TG', href: '#' },
-  { label: 'Discord', icon: 'DC', href: '#' },
+  { label: 'Twitter', icon: 'X', href: 'https://twitter.com' },
+  { label: 'Telegram', icon: 'TG', href: 'https://telegram.org' },
+  { label: 'Discord', icon: 'DC', href: 'https://discord.com' },
 ];
 
 const Footer = () => {
@@ -29,10 +30,10 @@ const Footer = () => {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-warning flex items-center justify-center">
                 <Coins className="w-6 h-6 text-primary-foreground" />
               </div>
-              <span className="text-xl font-display font-bold text-gradient">FemiCoin</span>
+              <span className="text-xl font-display font-bold text-gradient">WICN</span>
             </div>
             <p className="text-sm text-muted-foreground mb-4">
-              Your trusted gateway to the world of cryptocurrency. Trade securely and confidently.
+              Worldwide Investment Compensation Network. Your trusted gateway to cryptocurrency investments.
             </p>
             {/* Social Links */}
             <div className="flex gap-3">
@@ -40,6 +41,8 @@ const Footer = () => {
                 <a
                   key={social.label}
                   href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
                   aria-label={social.label}
                 >
@@ -55,12 +58,21 @@ const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {link.label}
-                  </a>
+                  {link.href.startsWith('mailto:') ? (
+                    <a
+                      href={link.href}
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      to={link.href}
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -72,12 +84,12 @@ const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-sm text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -103,7 +115,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-border mt-12 pt-6 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} FemiCoin. All rights reserved.
+          © {new Date().getFullYear()} WICN - Worldwide Investment Compensation Network. All rights reserved.
         </div>
       </div>
     </footer>
