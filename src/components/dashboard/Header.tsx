@@ -82,15 +82,19 @@ const Header = () => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="gap-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-warning flex items-center justify-center">
-                  <User className="w-4 h-4 text-primary-foreground" />
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-warning flex items-center justify-center overflow-hidden">
+                  {user?.profile?.profilePicture ? (
+                    <img src={user.profile.profilePicture} alt={user.profile.displayName} className="w-full h-full object-cover" />
+                  ) : (
+                    <User className="w-4 h-4 text-primary-foreground" />
+                  )}
                 </div>
-                <span className="hidden sm:inline font-medium">{user?.username}</span>
+                <span className="hidden sm:inline font-medium">{user?.profile?.displayName || user?.username}</span>
                 <ChevronDown className="w-4 h-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/profile')}>
                 <User className="w-4 h-4 mr-2" />
                 Profile
               </DropdownMenuItem>

@@ -14,6 +14,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import CoinDetail from "./pages/CoinDetail";
 import Portfolio from "./pages/Portfolio";
+import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -37,6 +38,7 @@ const App = () => (
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/coin/:coinId" element={<CoinDetail />} />
                         <Route path="/portfolio" element={<Portfolio />} />
+                        <Route path="/profile" element={<Profile />} />
                         <Route path="/settings" element={<Settings />} />
                         <Route path="*" element={<NotFound />} />
                       </Routes>
