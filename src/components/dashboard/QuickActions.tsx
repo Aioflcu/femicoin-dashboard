@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowDownLeft, ArrowUpRight, Briefcase, CreditCard, RefreshCw, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import WithdrawModal from './WithdrawModal';
+import TradeModal from './TradeModal';
 
 const actions = [
   { id: 'send', label: 'Send', icon: ArrowUpRight, color: 'from-blue-500 to-blue-600' },
@@ -15,6 +16,8 @@ const actions = [
 
 const QuickActions = () => {
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
+  const [isTradeOpen, setIsTradeOpen] = useState(false);
+  const [tradeTab, setTradeTab] = useState<'buy' | 'sell' | 'swap'>('buy');
   const navigate = useNavigate();
 
   const handleAction = (actionId: string) => {
@@ -22,6 +25,15 @@ const QuickActions = () => {
       setIsWithdrawOpen(true);
     } else if (actionId === 'portfolio') {
       navigate('/portfolio');
+    } else if (actionId === 'buy') {
+      setTradeTab('buy');
+      setIsTradeOpen(true);
+    } else if (actionId === 'sell') {
+      setTradeTab('sell');
+      setIsTradeOpen(true);
+    } else if (actionId === 'swap') {
+      setTradeTab('swap');
+      setIsTradeOpen(true);
     }
   };
 
@@ -49,6 +61,7 @@ const QuickActions = () => {
       </div>
 
       <WithdrawModal open={isWithdrawOpen} onOpenChange={setIsWithdrawOpen} />
+      <TradeModal open={isTradeOpen} onOpenChange={setIsTradeOpen} defaultTab={tradeTab} />
     </>
   );
 };

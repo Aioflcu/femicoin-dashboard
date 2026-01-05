@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 export interface Transaction {
   id: string;
-  type: 'received' | 'sent' | 'swapped' | 'bought' | 'withdrawn';
+  type: 'received' | 'sent' | 'swapped' | 'bought' | 'withdrawn' | 'sold';
   coin: string;
   amount: number;
   usdValue: number;
@@ -24,6 +24,7 @@ interface WalletContextType {
   transactions: Transaction[];
   totalBalance: number;
   withdraw: (coin: string, amount: number, address: string) => void;
+  executeTrade: (type: 'buy' | 'sell' | 'swap', coin: string, amount: number, price: number, coinName: string, coinImage: string) => void;
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
@@ -77,8 +78,102 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     setTransactions(prev => [newTransaction, ...prev]);
   };
 
+  const executeTrade = (
+    type: 'buy' | 'sell' | 'swap',
+    coin: string,
+    amount: number,
+    price: number,
+    coinName: string,
+    coinImage: string
+  ) => {
+    const usdValue = amount * price;
+
+    if (type === 'buy') {
+      // Deduct USDT and add the coin
+      setBalances(prev => {
+        const updated = prev.map(b => {
+          if (b.symbol === 'USDT') {
+            return { ...b, amount: b.amount - usdValue, usdValue: b.usdValue - usdValue };
+          }
+          if (b.symbol === coin) {
+            return { ...b, amount: b.amount + amount, usdValue: b.usdValue + usdValue };
+          }
+          return b;
+        });
+        
+        // If coin doesn't exist in balances, add it
+        const coinExists = updated.some(b => b.symbol === coin);
+        if (!coinExists) {
+          updated.push({
+            coin: coinName,
+            symbol: coin,
+            amount,
+            usdValue,
+            image: coinImage,
+          });
+        }
+        
+        return updated;
+      });
+
+      setTransactions(prev => [{
+        id: Date.now().toString(),
+        type: 'bought',
+        coin,
+        amount,
+        usdValue,
+        status: 'success',
+        date: new Date().toISOString(),
+      }, ...prev]);
+    }
+
+    if (type === 'sell') {
+      // Add USDT and deduct the coin
+      setBalances(prev => prev.map(b => {
+        if (b.symbol === 'USDT') {
+          return { ...b, amount: b.amount + usdValue, usdValue: b.usdValue + usdValue };
+        }
+        if (b.symbol === coin) {
+          return { ...b, amount: b.amount - amount, usdValue: b.usdValue - usdValue };
+        }
+        return b;
+      }).filter(b => b.amount > 0));
+
+      setTransactions(prev => [{
+        id: Date.now().toString(),
+        type: 'sold',
+        coin,
+        amount,
+        usdValue,
+        status: 'success',
+        date: new Date().toISOString(),
+      }, ...prev]);
+    }
+
+    if (type === 'swap') {
+      // For swap, we only deduct the "from" coin here
+      // The "to" coin is added separately via another executeTrade call
+      setBalances(prev => prev.map(b => {
+        if (b.symbol === coin) {
+          return { ...b, amount: b.amount - amount, usdValue: b.usdValue - usdValue };
+        }
+        return b;
+      }).filter(b => b.amount > 0));
+
+      setTransactions(prev => [{
+        id: Date.now().toString(),
+        type: 'swapped',
+        coin: coinName, // This will be "BTC → ETH" format
+        amount,
+        usdValue,
+        status: 'success',
+        date: new Date().toISOString(),
+      }, ...prev]);
+    }
+  };
+
   return (
-    <WalletContext.Provider value={{ balances, transactions, totalBalance, withdraw }}>
+    <WalletContext.Provider value={{ balances, transactions, totalBalance, withdraw, executeTrade }}>
       {children}
     </WalletContext.Provider>
   );
