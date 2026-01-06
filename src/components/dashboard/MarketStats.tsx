@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown, Activity, DollarSign, BarChart3, Coins } from 'lucide-react';
 import { fetchWithApiKey } from '@/lib/coingecko';
 
@@ -23,6 +24,18 @@ const formatNumber = (num: number): string => {
   return `$${num.toLocaleString()}`;
 };
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.4,
+    },
+  }),
+};
+
 const MarketStats = () => {
   const { data, isLoading } = useQuery({
     queryKey: ['globalMarketData'],
@@ -37,27 +50,35 @@ const MarketStats = () => {
       value: formatNumber(data.data.total_market_cap.usd),
       change: data.data.market_cap_change_percentage_24h_usd,
       icon: DollarSign,
+      color: 'from-primary/20 to-warning/20',
     },
     {
       label: '24h Volume',
       value: formatNumber(data.data.total_volume.usd),
       icon: BarChart3,
+      color: 'from-blue-500/20 to-cyan-500/20',
     },
     {
       label: 'BTC Dominance',
       value: `${data.data.market_cap_percentage.btc.toFixed(1)}%`,
       icon: Coins,
+      color: 'from-orange-500/20 to-yellow-500/20',
     },
     {
       label: 'Active Cryptos',
       value: data.data.active_cryptocurrencies.toLocaleString(),
       icon: Activity,
+      color: 'from-purple-500/20 to-pink-500/20',
     },
   ] : [];
 
   if (isLoading) {
     return (
-      <div className="glass-card rounded-2xl p-6 animate-fade-in" style={{ animationDelay: '0.15s' }}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="glass-card rounded-2xl p-6"
+      >
         <h2 className="text-xl font-display font-semibold mb-4">Market Overview</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
@@ -67,31 +88,79 @@ const MarketStats = () => {
             </div>
           ))}
         </div>
-      </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="glass-card rounded-2xl p-6 animate-fade-in" style={{ animationDelay: '0.15s' }}>
-      <h2 className="text-xl font-display font-semibold mb-4">Market Overview</h2>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="glass-card rounded-2xl p-6"
+    >
+      <h2 className="text-xl font-display font-semibold mb-4 flex items-center gap-2">
+        <BarChart3 className="w-5 h-5 text-primary" />
+        Market Overview
+      </h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {stats.map((stat) => (
-          <div key={stat.label} className="bg-secondary/50 rounded-xl p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <stat.icon className="w-4 h-4 text-primary" />
-              <span className="text-sm text-muted-foreground">{stat.label}</span>
-            </div>
-            <p className="text-lg font-display font-bold">{stat.value}</p>
-            {stat.change !== undefined && (
-              <div className={`flex items-center gap-1 text-sm mt-1 ${stat.change >= 0 ? 'text-success' : 'text-destructive'}`}>
-                {stat.change >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                {stat.change >= 0 ? '+' : ''}{stat.change.toFixed(2)}%
+        {stats.map((stat, index) => (
+          <motion.div
+            key={stat.label}
+            custom={index}
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover={{ scale: 1.02, y: -4 }}
+            className={`relative overflow-hidden bg-gradient-to-br ${stat.color} rounded-xl p-4 border border-border/50 group cursor-pointer transition-shadow hover:shadow-lg`}
+          >
+            {/* Animated shine effect */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full"
+              animate={{
+                translateX: ['100%', '-100%'],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                repeatDelay: 2,
+                ease: 'linear',
+              }}
+            />
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 mb-2">
+                <motion.div
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <stat.icon className="w-4 h-4 text-primary" />
+                </motion.div>
+                <span className="text-sm text-muted-foreground">{stat.label}</span>
               </div>
-            )}
-          </div>
+              <motion.p
+                className="text-lg font-display font-bold"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 + index * 0.1 }}
+              >
+                {stat.value}
+              </motion.p>
+              {stat.change !== undefined && (
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 + index * 0.1 }}
+                  className={`flex items-center gap-1 text-sm mt-1 ${stat.change >= 0 ? 'text-success' : 'text-destructive'}`}
+                >
+                  {stat.change >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                  {stat.change >= 0 ? '+' : ''}{stat.change.toFixed(2)}%
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
