@@ -30,11 +30,11 @@ interface WalletContextType {
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
 const initialBalances: WalletBalance[] = [
-  { coin: 'Bitcoin', symbol: 'BTC', amount: 1.5234, usdValue: 65432.10, image: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png' },
-  { coin: 'Ethereum', symbol: 'ETH', amount: 12.456, usdValue: 29876.50, image: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png' },
-  { coin: 'Tether', symbol: 'USDT', amount: 5000, usdValue: 5000, image: 'https://assets.coingecko.com/coins/images/325/small/Tether.png' },
-  { coin: 'BNB', symbol: 'BNB', amount: 25.8, usdValue: 8234.50, image: 'https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png' },
-  { coin: 'Solana', symbol: 'SOL', amount: 45.23, usdValue: 3567.80, image: 'https://assets.coingecko.com/coins/images/4128/small/solana.png' },
+  { coin: 'Bitcoin', symbol: 'BTC', amount: 98.5234, usdValue: 9120328.35, image: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png' },
+  { coin: 'Ethereum', symbol: 'ETH', amount: 12.456, usdValue: 45000, image: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png' },
+  { coin: 'Tether', symbol: 'USDT', amount: 50000, usdValue: 50000, image: 'https://assets.coingecko.com/coins/images/325/small/Tether.png' },
+  { coin: 'BNB', symbol: 'BNB', amount: 25.8, usdValue: 3500, image: 'https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png' },
+  { coin: 'Solana', symbol: 'SOL', amount: 45.23, usdValue: 1500, image: 'https://assets.coingecko.com/coins/images/4128/small/solana.png' },
 ];
 
 const initialTransactions: Transaction[] = [
