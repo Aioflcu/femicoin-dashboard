@@ -158,7 +158,7 @@ const FAQ = () => {
         },
         {
           question: 'How do I contact customer support?',
-          answer: 'You can reach our support team 24/7 through multiple channels: live chat on our website, email at support@wicn.com, or through our social media channels. For account-specific issues, please use our secure support ticket system while logged into your account. We aim to respond to all inquiries within 24 hours, with priority support for urgent issues.',
+          answer: 'You can reach our support team 24/7 through multiple channels: Email us at internationalinvestmentcompens@gmail.com or contact our Telegram support agent @JamesRace. For account-specific issues, please use our secure support ticket system while logged into your account. We aim to respond to all inquiries within 24 hours, with priority support for urgent issues.',
         },
         {
           question: 'What are the supported browsers?',

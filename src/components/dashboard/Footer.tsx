@@ -5,17 +5,20 @@ const footerLinks = {
   company: [
     { label: 'About', href: '/about' },
     { label: 'FAQs', href: '/faq' },
-    { label: 'Support', href: 'mailto:support@wicn.com' },
   ],
   legal: [
     { label: 'Privacy Policy', href: '/privacy' },
     { label: 'Terms & Conditions', href: '/terms' },
   ],
+  support: [
+    { label: 'Email Support', href: 'mailto:internationalinvestmentcompens@gmail.com', icon: '📧' },
+    { label: 'Telegram: @JamesRace', href: 'https://t.me/JamesRace', icon: '💬' },
+  ],
 };
 
 const socialLinks = [
   { label: 'Twitter', icon: 'X', href: 'https://twitter.com' },
-  { label: 'Telegram', icon: 'TG', href: 'https://telegram.org' },
+  { label: 'Telegram', icon: 'TG', href: 'https://t.me/JamesRace' },
   { label: 'Discord', icon: 'DC', href: 'https://discord.com' },
 ];
 
@@ -90,6 +93,26 @@ const Footer = () => {
                   >
                     {link.label}
                   </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Support Links */}
+          <div>
+            <h4 className="font-display font-semibold mb-4">Support</h4>
+            <ul className="space-y-3">
+              {footerLinks.support.map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2"
+                  >
+                    <span>{link.icon}</span>
+                    {link.label}
+                  </a>
                 </li>
               ))}
             </ul>
