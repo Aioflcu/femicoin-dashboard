@@ -23,8 +23,10 @@ interface WalletContextType {
   balances: WalletBalance[];
   transactions: Transaction[];
   totalBalance: number;
+  hasDeposited: boolean;
   withdraw: (coin: string, amount: number, address: string) => void;
   executeTrade: (type: 'buy' | 'sell' | 'swap', coin: string, amount: number, price: number, coinName: string, coinImage: string) => void;
+  addDeposit: (usdAmount: number) => void;
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
@@ -48,8 +50,33 @@ const initialTransactions: Transaction[] = [
 export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [balances, setBalances] = useState<WalletBalance[]>(initialBalances);
   const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
+  const [hasDeposited, setHasDeposited] = useState(false);
 
   const totalBalance = balances.reduce((sum, b) => sum + b.usdValue, 0);
+
+  const addDeposit = (usdAmount: number) => {
+    // Add deposit to USDT balance
+    setBalances(prev => prev.map(b => {
+      if (b.symbol === 'USDT') {
+        return { ...b, amount: b.amount + usdAmount, usdValue: b.usdValue + usdAmount };
+      }
+      return b;
+    }));
+
+    // Record the deposit transaction
+    const newTransaction: Transaction = {
+      id: Date.now().toString(),
+      type: 'received',
+      coin: 'USDT',
+      amount: usdAmount,
+      usdValue: usdAmount,
+      status: 'success',
+      date: new Date().toISOString(),
+    };
+
+    setTransactions(prev => [newTransaction, ...prev]);
+    setHasDeposited(true);
+  };
 
   const withdraw = (coin: string, amount: number, address: string) => {
     const balance = balances.find(b => b.symbol === coin);
@@ -173,7 +200,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   };
 
   return (
-    <WalletContext.Provider value={{ balances, transactions, totalBalance, withdraw, executeTrade }}>
+    <WalletContext.Provider value={{ balances, transactions, totalBalance, hasDeposited, withdraw, executeTrade, addDeposit }}>
       {children}
     </WalletContext.Provider>
   );
