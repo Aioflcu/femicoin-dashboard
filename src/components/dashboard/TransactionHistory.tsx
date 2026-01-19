@@ -77,7 +77,7 @@ const TransactionHistory = () => {
                       : 'bg-warning/20 text-warning'
                   }`}
                 >
-                  {tx.status}
+                  {tx.status === 'pending' ? 'Reviewing withdrawal processing……' : tx.status}
                 </span>
               </div>
             </div>
