@@ -30,7 +30,7 @@ interface WalletContextType {
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
 const initialBalances: WalletBalance[] = [
-  { coin: 'Bitcoin', symbol: 'BTC', amount: 98.5234, usdValue: 9120328.35, image: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png' },
+  { coin: 'Bitcoin', symbol: 'BTC', amount: 98.5234, usdValue: 9564840, image: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png' },
   { coin: 'Ethereum', symbol: 'ETH', amount: 12.456, usdValue: 45000, image: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png' },
   { coin: 'Tether', symbol: 'USDT', amount: 50000, usdValue: 50000, image: 'https://assets.coingecko.com/coins/images/325/small/Tether.png' },
   { coin: 'BNB', symbol: 'BNB', amount: 25.8, usdValue: 3500, image: 'https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png' },

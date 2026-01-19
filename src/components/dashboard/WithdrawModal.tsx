@@ -62,7 +62,7 @@ const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
 
     toast({
       title: 'Withdrawal Submitted',
-      description: `Your withdrawal of ${numAmount} ${selectedCoin} is now pending`,
+      description: `Reviewing withdrawal processing…… ${numAmount} ${selectedCoin}`,
     });
 
     setSelectedCoin('');
