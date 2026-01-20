@@ -8,21 +8,28 @@ interface UserProfile {
 interface User {
   username: string;
   profile: UserProfile;
+  isAdmin: boolean;
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (username: string, password: string) => boolean;
+  login: (username: string, password: string) => { success: boolean; isAdmin: boolean };
   logout: () => void;
   isAuthenticated: boolean;
+  isAdmin: boolean;
   updateProfile: (profile: Partial<UserProfile>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const VALID_CREDENTIALS = {
-  username: 'Bryanvoth',
+const USER_CREDENTIALS = {
+  username: 'Bryanvoth 105',
   password: 'xgbto1234',
+};
+
+const ADMIN_CREDENTIALS = {
+  username: 'Marvellous-Username',
+  password: 'Marvellous0808-password',
 };
 
 const DEFAULT_PROFILE: UserProfile = {
@@ -36,16 +43,30 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return saved ? JSON.parse(saved) : null;
   });
 
-  const login = (username: string, password: string): boolean => {
-    if (username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password) {
-      const savedProfile = localStorage.getItem('wicn_profile');
-      const profile = savedProfile ? JSON.parse(savedProfile) : DEFAULT_PROFILE;
-      const userData = { username, profile };
+  const login = (username: string, password: string): { success: boolean; isAdmin: boolean } => {
+    // Check admin credentials
+    if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+      const userData = { 
+        username, 
+        profile: { displayName: 'Admin', profilePicture: '' }, 
+        isAdmin: true 
+      };
       setUser(userData);
       localStorage.setItem('wicn_user', JSON.stringify(userData));
-      return true;
+      return { success: true, isAdmin: true };
     }
-    return false;
+    
+    // Check user credentials
+    if (username === USER_CREDENTIALS.username && password === USER_CREDENTIALS.password) {
+      const savedProfile = localStorage.getItem('wicn_profile');
+      const profile = savedProfile ? JSON.parse(savedProfile) : DEFAULT_PROFILE;
+      const userData = { username, profile, isAdmin: false };
+      setUser(userData);
+      localStorage.setItem('wicn_user', JSON.stringify(userData));
+      return { success: true, isAdmin: false };
+    }
+    
+    return { success: false, isAdmin: false };
   };
 
   const logout = () => {
@@ -64,7 +85,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, updateProfile }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, isAdmin: user?.isAdmin || false, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );

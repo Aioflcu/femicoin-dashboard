@@ -30,14 +30,22 @@ const Login = () => {
 
     await new Promise(resolve => setTimeout(resolve, 800));
 
-    const success = login(username, password);
+    const result = login(username, password);
     
-    if (success) {
-      toast({
-        title: "Welcome back, Bryan!",
-        description: "Successfully logged in to WICN",
-      });
-      navigate('/dashboard');
+    if (result.success) {
+      if (result.isAdmin) {
+        toast({
+          title: "Welcome, Admin!",
+          description: "Accessing admin panel",
+        });
+        navigate('/admin');
+      } else {
+        toast({
+          title: "Welcome back, Bryan!",
+          description: "Successfully logged in to WICN",
+        });
+        navigate('/dashboard');
+      }
     } else {
       toast({
         title: "Login failed",
