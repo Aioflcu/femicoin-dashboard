@@ -40,7 +40,12 @@ const DEFAULT_PROFILE: UserProfile = {
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
     const saved = localStorage.getItem('wicn_user');
-    return saved ? JSON.parse(saved) : null;
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Ensure isAdmin is always defined (for backward compatibility)
+      return { ...parsed, isAdmin: parsed.isAdmin ?? false };
+    }
+    return null;
   });
 
   const login = (username: string, password: string): { success: boolean; isAdmin: boolean } => {
