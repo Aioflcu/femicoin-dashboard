@@ -15,7 +15,7 @@ const Admin = () => {
   const { user, isAdmin, logout } = useAuth();
   const { addDeposit, totalBalance, hasDeposited } = useWallet();
   const navigate = useNavigate();
-  const [depositAmount, setDepositAmount] = useState('10000');
+  const [depositAmount, setDepositAmount] = useState('20000');
   const [isConfirming, setIsConfirming] = useState(false);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const Admin = () => {
     });
     
     setIsConfirming(false);
-    setDepositAmount('10000');
+    setDepositAmount('20000');
   };
 
   const handleLogout = () => {
@@ -140,7 +140,7 @@ const Admin = () => {
                 Deposit BTC Wallet
               </CardTitle>
               <CardDescription>
-                This is the wallet address where users send their $10,000 deposit
+                This is the wallet address where users send their $20,000 deposit
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -169,7 +169,7 @@ const Admin = () => {
                 Confirm User Deposit
               </CardTitle>
               <CardDescription>
-                Once you verify the $10,000 BTC deposit has been received, confirm it here to add funds to the user's wallet and unlock withdrawals
+                Once you verify the $20,000 BTC deposit has been received, confirm it here to add funds to the user's wallet and unlock withdrawals
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
