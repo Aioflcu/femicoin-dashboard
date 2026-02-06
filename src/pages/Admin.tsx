@@ -19,8 +19,10 @@ const Admin = () => {
   const [isConfirming, setIsConfirming] = useState(false);
 
   useEffect(() => {
-    if (!user || !isAdmin) {
+    if (!user) {
       navigate('/');
+    } else if (!isAdmin) {
+      navigate('/dashboard');
     }
   }, [user, isAdmin, navigate]);
 
