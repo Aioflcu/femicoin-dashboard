@@ -17,7 +17,7 @@ const PrivacyPolicy = () => {
             <section className="glass-card rounded-2xl p-8">
               <h2 className="text-2xl font-display font-semibold mb-4">1. Introduction</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Worldwide Investment Compensation Network ("WICN," "we," "us," or "our") is committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, mobile application, and use our services.
+                GAIN-VESTOR ("GAIN-VESTOR," "we," "us," or "our") is committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, mobile application, and use our services.
               </p>
               <p className="text-muted-foreground leading-relaxed mb-4">
                 By accessing or using our services, you acknowledge that you have read, understood, and agree to be bound by all the terms of this Privacy Policy. If you do not agree with this Privacy Policy, please do not access or use our services.
@@ -282,9 +282,9 @@ const PrivacyPolicy = () => {
                 If you have questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:
               </p>
               <div className="text-muted-foreground">
-                <p><strong>Email:</strong> privacy@wicn.com</p>
-                <p><strong>Data Protection Officer:</strong> dpo@wicn.com</p>
-                <p><strong>Address:</strong> WICN Privacy Team, 1234 Financial District, Suite 500, New York, NY 10004, United States</p>
+                <p><strong>Email:</strong> privacy@gain-vestor.com</p>
+                <p><strong>Data Protection Officer:</strong> dpo@gain-vestor.com</p>
+                <p><strong>Address:</strong> GAIN-VESTOR Privacy Team, 1234 Financial District, Suite 500, New York, NY 10004, United States</p>
               </div>
             </section>
           </div>

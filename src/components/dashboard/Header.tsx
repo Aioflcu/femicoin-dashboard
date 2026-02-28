@@ -1,15 +1,11 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Bell, ChevronDown, Coins, Globe, LogOut, Settings, User } from 'lucide-react';
+import { Bell, ChevronDown, Activity, Globe, LogOut, Settings, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/ThemeToggle';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
 const languages = [
@@ -26,25 +22,19 @@ const Header = () => {
   const [currentLang, setCurrentLang] = useState(languages[0]);
   const [hasNotifications] = useState(true);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
+  const handleLogout = () => { logout(); navigate('/'); };
 
   return (
     <header className="sticky top-0 z-50 glass-card border-b border-border/50">
       <div className="container flex items-center justify-between h-16 px-4">
-        {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-warning flex items-center justify-center shadow-lg">
-            <Coins className="w-6 h-6 text-primary-foreground" />
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg neon-glow">
+            <Activity className="w-6 h-6 text-primary-foreground" />
           </div>
-          <span className="text-xl font-display font-bold text-gradient hidden sm:block">WICN</span>
+          <span className="text-xl font-display font-bold text-gradient hidden sm:block tracking-wider">GAIN-VESTOR</span>
         </div>
 
-        {/* Right side */}
         <div className="flex items-center gap-2 sm:gap-4">
-          {/* Language Switcher */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="gap-2">
@@ -55,34 +45,24 @@ const Header = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
               {languages.map((lang) => (
-                <DropdownMenuItem
-                  key={lang.code}
-                  onClick={() => setCurrentLang(lang)}
-                  className={currentLang.code === lang.code ? 'bg-secondary' : ''}
-                >
-                  <span className="mr-2">{lang.flag}</span>
-                  {lang.name}
+                <DropdownMenuItem key={lang.code} onClick={() => setCurrentLang(lang)} className={currentLang.code === lang.code ? 'bg-secondary' : ''}>
+                  <span className="mr-2">{lang.flag}</span>{lang.name}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Theme Toggle */}
           <ThemeToggle />
 
-          {/* Notifications */}
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="w-5 h-5" />
-            {hasNotifications && (
-              <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full" />
-            )}
+            {hasNotifications && <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full neon-glow" />}
           </Button>
 
-          {/* Profile */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="gap-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-warning flex items-center justify-center overflow-hidden">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center overflow-hidden">
                   {user?.profile?.profilePicture ? (
                     <img src={user.profile.profilePicture} alt={user.profile.displayName} className="w-full h-full object-cover" />
                   ) : (
@@ -94,19 +74,10 @@ const Header = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem onClick={() => navigate('/profile')}>
-                <User className="w-4 h-4 mr-2" />
-                Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate('/settings')}>
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/profile')}><User className="w-4 h-4 mr-2" />Profile</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/settings')}><Settings className="w-4 h-4 mr-2" />Settings</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout} className="text-destructive">
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
-              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout} className="text-destructive"><LogOut className="w-4 h-4 mr-2" />Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

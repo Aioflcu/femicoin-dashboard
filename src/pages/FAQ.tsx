@@ -13,28 +13,28 @@ const FAQ = () => {
       category: 'General Questions',
       faqs: [
         {
-          question: 'What is WICN?',
-          answer: 'WICN (Worldwide Investment Compensation Network) is a comprehensive cryptocurrency investment platform that enables users to trade, invest, and manage their digital asset portfolios. Founded in 2019, we provide secure, user-friendly tools for both beginners and experienced traders to participate in the cryptocurrency market. Our platform offers real-time market data, portfolio tracking, and advanced trading features.',
+          question: 'What is GAIN-VESTOR?',
+          answer: 'GAIN-VESTOR is a comprehensive cryptocurrency investment platform that enables users to trade, invest, and manage their digital asset portfolios. Founded in 2019, we provide secure, user-friendly tools for both beginners and experienced traders to participate in the cryptocurrency market. Our platform offers real-time market data, portfolio tracking, and advanced trading features.',
         },
         {
           question: 'How do I create an account?',
           answer: 'Creating an account is simple. Click on the "Sign Up" button on our homepage and provide your email address, create a secure password, and complete the verification process. You\'ll receive a confirmation email to verify your account. Once verified, you can log in and start exploring our platform. We recommend enabling two-factor authentication for added security.',
         },
         {
-          question: 'Is WICN available in my country?',
-          answer: 'WICN operates in over 180 countries worldwide. However, due to regulatory requirements, certain features may be limited or unavailable in specific jurisdictions. To check availability in your region, please visit our supported countries page or contact our support team. We continuously work to expand our services to new markets while maintaining compliance with local regulations.',
+          question: 'Is GAIN-VESTOR available in my country?',
+          answer: 'GAIN-VESTOR operates in over 180 countries worldwide. However, due to regulatory requirements, certain features may be limited or unavailable in specific jurisdictions. To check availability in your region, please visit our supported countries page or contact our support team. We continuously work to expand our services to new markets while maintaining compliance with local regulations.',
         },
         {
-          question: 'What cryptocurrencies can I trade on WICN?',
-          answer: 'WICN supports over 500 cryptocurrencies including major coins like Bitcoin (BTC), Ethereum (ETH), Ripple (XRP), Cardano (ADA), Solana (SOL), and many more. We regularly add new tokens based on market demand and after thorough security vetting. You can view the complete list of supported assets in our trading interface.',
+          question: 'What cryptocurrencies can I trade on GAIN-VESTOR?',
+          answer: 'GAIN-VESTOR supports over 500 cryptocurrencies including major coins like Bitcoin (BTC), Ethereum (ETH), Ripple (XRP), Cardano (ADA), Solana (SOL), and many more. We regularly add new tokens based on market demand and after thorough security vetting. You can view the complete list of supported assets in our trading interface.',
         },
         {
-          question: 'How does WICN make money?',
-          answer: 'WICN generates revenue through trading fees, which are among the lowest in the industry. We charge a small percentage on each trade, with reduced fees for high-volume traders. We may also earn from spread margins on certain trading pairs and premium subscription services. We never sell user data or charge hidden fees.',
+          question: 'How does GAIN-VESTOR make money?',
+          answer: 'GAIN-VESTOR generates revenue through trading fees, which are among the lowest in the industry. We charge a small percentage on each trade, with reduced fees for high-volume traders. We may also earn from spread margins on certain trading pairs and premium subscription services. We never sell user data or charge hidden fees.',
         },
         {
-          question: 'Can I use WICN on mobile devices?',
-          answer: 'Yes, WICN is fully responsive and works on all modern mobile devices through your web browser. We\'re also developing dedicated iOS and Android applications with enhanced features including biometric authentication and push notifications. Stay tuned for announcements about our mobile app releases.',
+          question: 'Can I use GAIN-VESTOR on mobile devices?',
+          answer: 'Yes, GAIN-VESTOR is fully responsive and works on all modern mobile devices through your web browser. We\'re also developing dedicated iOS and Android applications with enhanced features including biometric authentication and push notifications. Stay tuned for announcements about our mobile app releases.',
         },
       ],
     },
@@ -54,16 +54,16 @@ const FAQ = () => {
           answer: 'Click on the "Forgot Password" link on the login page and enter your registered email address. We\'ll send you a secure password reset link. For security reasons, this link expires after 24 hours. If you also have 2FA enabled, you\'ll need access to your authenticator app. If you\'ve lost access to both, contact our support team with identity verification documents.',
         },
         {
-          question: 'How does WICN protect my funds?',
+          question: 'How does GAIN-VESTOR protect my funds?',
           answer: 'We employ multiple security measures including: cold storage for 98% of digital assets, multi-signature wallets requiring multiple approvals, 256-bit SSL encryption for all data transmission, regular third-party security audits, real-time fraud monitoring systems, and comprehensive insurance coverage for digital assets. Our security infrastructure meets or exceeds banking industry standards.',
         },
         {
-          question: 'What happens if WICN is hacked?',
+          question: 'What happens if GAIN-VESTOR is hacked?',
           answer: 'While we employ industry-leading security measures, we also maintain comprehensive insurance coverage to protect user funds in the unlikely event of a security breach. Our cold storage solution means the vast majority of funds are stored offline and inaccessible to hackers. We have incident response protocols in place and would immediately notify affected users and relevant authorities.',
         },
         {
-          question: 'How can I verify official WICN communications?',
-          answer: 'Official communications from WICN will always come from our verified email domains and will never ask for your password or 2FA codes. We use PGP signatures for important announcements. Be wary of unsolicited messages on social media or messaging apps. When in doubt, log into your account directly through our official website to verify any claims or offers.',
+          question: 'How can I verify official GAIN-VESTOR communications?',
+          answer: 'Official communications from GAIN-VESTOR will always come from our verified email domains and will never ask for your password or 2FA codes. We use PGP signatures for important announcements. Be wary of unsolicited messages on social media or messaging apps. When in doubt, log into your account directly through our official website to verify any claims or offers.',
         },
         {
           question: 'Can I have multiple accounts?',
@@ -76,11 +76,11 @@ const FAQ = () => {
       faqs: [
         {
           question: 'How do I buy cryptocurrency?',
-          answer: 'After logging into your account, navigate to the Trading section and select the cryptocurrency you wish to purchase. You can buy using funds in your WICN wallet or directly with a linked payment method. Enter the amount you want to buy, review the transaction details including fees, and confirm your purchase. The cryptocurrency will be credited to your wallet instantly.',
+          answer: 'After logging into your account, navigate to the Trading section and select the cryptocurrency you wish to purchase. You can buy using funds in your GAIN-VESTOR wallet or directly with a linked payment method. Enter the amount you want to buy, review the transaction details including fees, and confirm your purchase. The cryptocurrency will be credited to your wallet instantly.',
         },
         {
           question: 'What are trading fees?',
-          answer: 'WICN charges competitive trading fees based on your 30-day trading volume. Standard fees start at 0.1% for makers and 0.15% for takers. High-volume traders can qualify for significantly reduced fees. We also offer fee discounts for users who hold WICN tokens. You can view the complete fee schedule in your account settings.',
+          answer: 'GAIN-VESTOR charges competitive trading fees based on your 30-day trading volume. Standard fees start at 0.1% for makers and 0.15% for takers. High-volume traders can qualify for significantly reduced fees. We also offer fee discounts for active platform users. You can view the complete fee schedule in your account settings.',
         },
         {
           question: 'What is the difference between market and limit orders?',
@@ -88,7 +88,7 @@ const FAQ = () => {
         },
         {
           question: 'How long do transactions take?',
-          answer: 'Internal transfers between WICN users are instant. External cryptocurrency transfers depend on the specific blockchain\'s confirmation time - Bitcoin typically takes 10-60 minutes, while Ethereum is usually 1-5 minutes. Fiat deposits and withdrawals may take 1-5 business days depending on your payment method and bank processing times.',
+          answer: 'Internal transfers between GAIN-VESTOR users are instant. External cryptocurrency transfers depend on the specific blockchain\'s confirmation time - Bitcoin typically takes 10-60 minutes, while Ethereum is usually 1-5 minutes. Fiat deposits and withdrawals may take 1-5 business days depending on your payment method and bank processing times.',
         },
         {
           question: 'What is the minimum investment amount?',
@@ -96,7 +96,7 @@ const FAQ = () => {
         },
         {
           question: 'Can I set up recurring purchases?',
-          answer: 'Yes, WICN offers a dollar-cost averaging (DCA) feature that allows you to set up automatic recurring purchases of your chosen cryptocurrencies. You can choose daily, weekly, or monthly intervals and specify the amount. This strategy helps reduce the impact of market volatility by spreading your purchases over time.',
+          answer: 'Yes, GAIN-VESTOR offers a dollar-cost averaging (DCA) feature that allows you to set up automatic recurring purchases of your chosen cryptocurrencies. You can choose daily, weekly, or monthly intervals and specify the amount. This strategy helps reduce the impact of market volatility by spreading your purchases over time.',
         },
         {
           question: 'What are stop-loss and take-profit orders?',
@@ -117,7 +117,7 @@ const FAQ = () => {
         },
         {
           question: 'What payment methods are supported?',
-          answer: 'WICN supports multiple payment methods including bank transfers (SEPA, SWIFT, ACH), major credit and debit cards (Visa, Mastercard), PayPal in select regions, and various local payment methods depending on your country. Cryptocurrency deposits are supported for all listed coins. Payment method availability varies by region.',
+          answer: 'GAIN-VESTOR supports multiple payment methods including bank transfers (SEPA, SWIFT, ACH), major credit and debit cards (Visa, Mastercard), PayPal in select regions, and various local payment methods depending on your country. Cryptocurrency deposits are supported for all listed coins. Payment method availability varies by region.',
         },
         {
           question: 'How long do withdrawals take?',
@@ -162,7 +162,7 @@ const FAQ = () => {
         },
         {
           question: 'What are the supported browsers?',
-          answer: 'WICN works best on the latest versions of Chrome, Firefox, Safari, and Microsoft Edge. We recommend keeping your browser updated for the best experience and security. Some features may not work correctly on older browser versions or less common browsers. Mobile browsers on iOS and Android are also supported.',
+          answer: 'GAIN-VESTOR works best on the latest versions of Chrome, Firefox, Safari, and Microsoft Edge. We recommend keeping your browser updated for the best experience and security. Some features may not work correctly on older browser versions or less common browsers. Mobile browsers on iOS and Android are also supported.',
         },
       ],
     },
@@ -170,8 +170,8 @@ const FAQ = () => {
       category: 'Regulatory & Compliance',
       faqs: [
         {
-          question: 'Is WICN regulated?',
-          answer: 'WICN operates in compliance with applicable regulations in each jurisdiction where we provide services. We hold relevant licenses and registrations including money transmission licenses in the United States, registration with financial authorities in Europe, and compliance with international AML/KYC requirements. We continuously monitor regulatory developments and adapt our practices accordingly.',
+          question: 'Is GAIN-VESTOR regulated?',
+          answer: 'GAIN-VESTOR operates in compliance with applicable regulations in each jurisdiction where we provide services. We hold relevant licenses and registrations including money transmission licenses in the United States, registration with financial authorities in Europe, and compliance with international AML/KYC requirements. We continuously monitor regulatory developments and adapt our practices accordingly.',
         },
         {
           question: 'What is KYC and why is it required?',
@@ -183,11 +183,11 @@ const FAQ = () => {
         },
         {
           question: 'Do I need to pay taxes on cryptocurrency gains?',
-          answer: 'Tax obligations vary by country and individual circumstances. In most jurisdictions, cryptocurrency gains are taxable events. WICN provides transaction history exports to help with tax reporting, but we don\'t provide tax advice. We recommend consulting with a tax professional familiar with cryptocurrency regulations in your country.',
+          answer: 'Tax obligations vary by country and individual circumstances. In most jurisdictions, cryptocurrency gains are taxable events. GAIN-VESTOR provides transaction history exports to help with tax reporting, but we don\'t provide tax advice. We recommend consulting with a tax professional familiar with cryptocurrency regulations in your country.',
         },
         {
-          question: 'What if I receive suspicious emails claiming to be from WICN?',
-          answer: 'Never click links or download attachments from suspicious emails. WICN will never ask for your password, 2FA codes, or private keys via email. Forward suspicious emails to our security team. Always access your account by typing our official URL directly in your browser. Enable email notifications in your account to recognize legitimate communications.',
+          question: 'What if I receive suspicious emails claiming to be from GAIN-VESTOR?',
+          answer: 'Never click links or download attachments from suspicious emails. GAIN-VESTOR will never ask for your password, 2FA codes, or private keys via email. Forward suspicious emails to our security team. Always access your account by typing our official URL directly in your browser. Enable email notifications in your account to recognize legitimate communications.',
         },
       ],
     },
@@ -202,7 +202,7 @@ const FAQ = () => {
           <div className="text-center mb-12">
             <h1 className="text-4xl font-display font-bold mb-4">Frequently Asked Questions</h1>
             <p className="text-muted-foreground text-lg">
-              Find answers to common questions about WICN, cryptocurrency trading, and account management.
+              Find answers to common questions about GAIN-VESTOR, cryptocurrency trading, and account management.
             </p>
           </div>
 
@@ -236,7 +236,7 @@ const FAQ = () => {
               Can't find what you're looking for? Our support team is here to help 24/7.
             </p>
             <a 
-              href="mailto:support@wicn.com"
+              href="mailto:support@gain-vestor.com"
               className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
             >
               Contact Support

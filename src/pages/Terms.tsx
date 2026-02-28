@@ -17,7 +17,7 @@ const Terms = () => {
             <section className="glass-card rounded-2xl p-8">
               <h2 className="text-2xl font-display font-semibold mb-4">1. Agreement to Terms</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                These Terms and Conditions ("Terms," "Agreement") constitute a legally binding agreement between you ("User," "you," "your") and Worldwide Investment Compensation Network ("WICN," "Company," "we," "us," "our") governing your access to and use of our website, mobile applications, and all related services (collectively, the "Services").
+                These Terms and Conditions ("Terms," "Agreement") constitute a legally binding agreement between you ("User," "you," "your") and GAIN-VESTOR ("GAIN-VESTOR," "Company," "we," "us," "our") governing your access to and use of our website, mobile applications, and all related services (collectively, the "Services").
               </p>
               <p className="text-muted-foreground leading-relaxed mb-4">
                 By accessing or using our Services, you acknowledge that you have read, understood, and agree to be bound by these Terms. If you do not agree to all terms and conditions of this Agreement, you must not access or use our Services. We reserve the right to amend or modify these Terms at any time without prior notice. Your continued use of the Services following any changes constitutes acceptance of those changes.
@@ -128,7 +128,7 @@ const Terms = () => {
             <section className="glass-card rounded-2xl p-8">
               <h2 className="text-2xl font-display font-semibold mb-4">6. Intellectual Property Rights</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                All content, features, and functionality of the Services, including but not limited to text, graphics, logos, icons, images, audio clips, software, and the compilation thereof, are the exclusive property of WICN or its licensors and are protected by copyright, trademark, patent, and other intellectual property laws.
+                All content, features, and functionality of the Services, including but not limited to text, graphics, logos, icons, images, audio clips, software, and the compilation thereof, are the exclusive property of GAIN-VESTOR or its licensors and are protected by copyright, trademark, patent, and other intellectual property laws.
               </p>
               <p className="text-muted-foreground leading-relaxed mb-4">
                 You are granted a limited, non-exclusive, non-transferable, revocable license to access and use the Services for personal, non-commercial purposes in accordance with these Terms. This license does not include the right to:
@@ -165,7 +165,7 @@ const Terms = () => {
             <section className="glass-card rounded-2xl p-8">
               <h2 className="text-2xl font-display font-semibold mb-4">8. Limitation of Liability</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL WICN, ITS AFFILIATES, DIRECTORS, EMPLOYEES, AGENTS, OR LICENSORS BE LIABLE FOR ANY:
+                TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL GAIN-VESTOR, ITS AFFILIATES, DIRECTORS, EMPLOYEES, AGENTS, OR LICENSORS BE LIABLE FOR ANY:
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-2 mb-4">
                 <li>INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES</li>
@@ -188,7 +188,7 @@ const Terms = () => {
             <section className="glass-card rounded-2xl p-8">
               <h2 className="text-2xl font-display font-semibold mb-4">9. Indemnification</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                You agree to defend, indemnify, and hold harmless WICN, its affiliates, and their respective directors, officers, employees, agents, and licensors from and against any and all claims, damages, obligations, losses, liabilities, costs, or debt, and expenses (including attorney's fees) arising from:
+                You agree to defend, indemnify, and hold harmless GAIN-VESTOR, its affiliates, and their respective directors, officers, employees, agents, and licensors from and against any and all claims, damages, obligations, losses, liabilities, costs, or debt, and expenses (including attorney's fees) arising from:
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-2">
                 <li>Your access to and use of the Services</li>
@@ -205,7 +205,7 @@ const Terms = () => {
 
               <h3 className="text-lg font-semibold mb-3 mt-6">10.1 Informal Resolution</h3>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Before initiating any formal dispute resolution proceeding, you agree to first contact us and attempt to resolve any dispute informally by sending a written notice describing the dispute to legal@wicn.com. We will attempt to resolve the dispute within 60 days.
+                Before initiating any formal dispute resolution proceeding, you agree to first contact us and attempt to resolve any dispute informally by sending a written notice describing the dispute to legal@gain-vestor.com. We will attempt to resolve the dispute within 60 days.
               </p>
 
               <h3 className="text-lg font-semibold mb-3 mt-6">10.2 Binding Arbitration</h3>
@@ -253,7 +253,7 @@ const Terms = () => {
 
               <h3 className="text-lg font-semibold mb-3 mt-6">13.1 Entire Agreement</h3>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                These Terms, together with our Privacy Policy and any other agreements expressly incorporated by reference, constitute the entire agreement between you and WICN regarding the Services and supersede all prior agreements.
+                These Terms, together with our Privacy Policy and any other agreements expressly incorporated by reference, constitute the entire agreement between you and GAIN-VESTOR regarding the Services and supersede all prior agreements.
               </p>
 
               <h3 className="text-lg font-semibold mb-3 mt-6">13.2 Severability</h3>
@@ -273,7 +273,7 @@ const Terms = () => {
 
               <h3 className="text-lg font-semibold mb-3 mt-6">13.5 Contact Information</h3>
               <p className="text-muted-foreground leading-relaxed">
-                For questions about these Terms, please contact us at: legal@wicn.com or write to: WICN Legal Department, 1234 Financial District, Suite 500, New York, NY 10004, United States.
+                For questions about these Terms, please contact us at: legal@gain-vestor.com or write to: GAIN-VESTOR Legal Department, 1234 Financial District, Suite 500, New York, NY 10004, United States.
               </p>
             </section>
           </div>
