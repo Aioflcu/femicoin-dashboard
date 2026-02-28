@@ -3,6 +3,6 @@
 // ... other file content
 
 // Line 312: Update the welcome message
-Welcome, Catherine Archer; // changed from "Welcome, Bryan Voth"
+Welcome, Bryan Voth; // reverted to original message
 
 // ... remaining file content
