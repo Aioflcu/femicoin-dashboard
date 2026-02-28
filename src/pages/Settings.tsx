@@ -58,7 +58,7 @@ const Settings = () => {
 
         <div className="mb-8">
           <h1 className="text-3xl font-display font-bold">Settings</h1>
-          <p className="text-muted-foreground mt-1">Customize your WICN experience</p>
+          <p className="text-muted-foreground mt-1">Customize your GAIN-VESTOR experience</p>
         </div>
 
         <div className="space-y-6">

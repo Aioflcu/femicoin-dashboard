@@ -27,14 +27,14 @@ const SettingsContext = createContext<SettingsContextType | undefined>(undefined
 
 export const SettingsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [settings, setSettings] = useState<Settings>(() => {
-    const saved = localStorage.getItem('wicn_settings');
+    const saved = localStorage.getItem('gv_settings');
     return saved ? { ...defaultSettings, ...JSON.parse(saved) } : defaultSettings;
   });
 
   const updateSettings = (newSettings: Partial<Settings>) => {
     setSettings(prev => {
       const updated = { ...prev, ...newSettings };
-      localStorage.setItem('wicn_settings', JSON.stringify(updated));
+      localStorage.setItem('gv_settings', JSON.stringify(updated));
       return updated;
     });
   };

@@ -65,11 +65,11 @@ const About = () => {
         <section className="container py-16 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-6">
-              About <span className="text-gradient">WICN</span>
+              About <span className="text-gradient">GAIN-VESTOR</span>
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              Worldwide Investment Compensation Network (WICN) is a global leader in cryptocurrency investment 
-              and portfolio management. Founded in 2019, we've helped millions of investors navigate the 
+              GAIN-VESTOR is a next-generation cryptocurrency investment 
+              and portfolio management platform. Founded in 2019, we've helped millions of investors navigate the 
               exciting world of digital assets with confidence and security.
             </p>
           </div>
@@ -82,7 +82,7 @@ const About = () => {
               <div>
                 <h2 className="text-3xl font-display font-bold mb-6">Our Mission</h2>
                 <p className="text-muted-foreground mb-4 leading-relaxed">
-                  At WICN, our mission is to democratize access to cryptocurrency investments and provide 
+                  At GAIN-VESTOR, our mission is to democratize access to cryptocurrency investments and provide 
                   every individual with the tools, knowledge, and security needed to build their financial future.
                 </p>
                 <p className="text-muted-foreground mb-4 leading-relaxed">
@@ -134,8 +134,8 @@ const About = () => {
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {team.map((member) => (
                 <div key={member.name} className="glass-card rounded-2xl p-6">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-warning flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl font-bold text-primary-foreground">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl font-bold text-primary-foreground font-display">
                       {member.name.split(' ').map(n => n[0]).join('')}
                     </span>
                   </div>
@@ -151,7 +151,7 @@ const About = () => {
         {/* Why Choose Us Section */}
         <section className="container py-16 px-4 border-t border-border">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-display font-bold text-center mb-12">Why Choose WICN?</h2>
+            <h2 className="text-3xl font-display font-bold text-center mb-12">Why Choose GAIN-VESTOR?</h2>
             <div className="grid md:grid-cols-2 gap-8">
               <div className="flex gap-4">
                 <div className="w-12 h-12 rounded-xl bg-success/10 flex items-center justify-center flex-shrink-0">

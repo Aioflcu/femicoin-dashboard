@@ -39,7 +39,7 @@ const DEFAULT_PROFILE: UserProfile = {
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
-    const saved = localStorage.getItem('wicn_user');
+    const saved = localStorage.getItem('gv_user');
     if (saved) {
       const parsed = JSON.parse(saved);
       // Ensure isAdmin is always defined (for backward compatibility)
@@ -57,17 +57,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAdmin: true 
       };
       setUser(userData);
-      localStorage.setItem('wicn_user', JSON.stringify(userData));
+      localStorage.setItem('gv_user', JSON.stringify(userData));
       return { success: true, isAdmin: true };
     }
     
     // Check user credentials
     if (username === USER_CREDENTIALS.username && password === USER_CREDENTIALS.password) {
-      const savedProfile = localStorage.getItem('wicn_profile');
+      const savedProfile = localStorage.getItem('gv_profile');
       const profile = savedProfile ? JSON.parse(savedProfile) : DEFAULT_PROFILE;
       const userData = { username, profile, isAdmin: false };
       setUser(userData);
-      localStorage.setItem('wicn_user', JSON.stringify(userData));
+      localStorage.setItem('gv_user', JSON.stringify(userData));
       return { success: true, isAdmin: false };
     }
     
@@ -76,7 +76,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('wicn_user');
+    localStorage.removeItem('gv_user');
   };
 
   const updateProfile = (profileUpdate: Partial<UserProfile>) => {
@@ -84,8 +84,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const updatedProfile = { ...user.profile, ...profileUpdate };
       const updatedUser = { ...user, profile: updatedProfile };
       setUser(updatedUser);
-      localStorage.setItem('wicn_user', JSON.stringify(updatedUser));
-      localStorage.setItem('wicn_profile', JSON.stringify(updatedProfile));
+      localStorage.setItem('gv_user', JSON.stringify(updatedUser));
+      localStorage.setItem('gv_profile', JSON.stringify(updatedProfile));
     }
   };
 

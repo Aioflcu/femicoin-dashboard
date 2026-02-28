@@ -8,7 +8,7 @@ const Index = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [showSplash, setShowSplash] = useState(() => {
-    const hasSeenSplash = sessionStorage.getItem('wicn_splash_shown');
+    const hasSeenSplash = sessionStorage.getItem('gv_splash_shown');
     return !hasSeenSplash;
   });
 
@@ -19,7 +19,7 @@ const Index = () => {
   }, [isAuthenticated, navigate]);
 
   const handleSplashComplete = () => {
-    sessionStorage.setItem('wicn_splash_shown', 'true');
+    sessionStorage.setItem('gv_splash_shown', 'true');
     setShowSplash(false);
   };
 
