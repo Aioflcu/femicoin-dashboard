@@ -96,7 +96,7 @@ const Dashboard = () => {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="flex-1 container py-6 px-4 space-y-6 relative z-10"
+        className="flex-1 container py-4 px-3 sm:py-6 sm:px-4 space-y-4 sm:space-y-6 relative z-10"
       >
         {/* Top Row: Wallet Overview + Quick Actions */}
         <motion.div variants={itemVariants} className="grid lg:grid-cols-3 gap-6">
