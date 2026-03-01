@@ -5,11 +5,10 @@ import { useWallet } from '@/contexts/WalletContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Shield, DollarSign, Check, LogOut, Copy, Wallet, Settings, Save } from 'lucide-react';
+import { Shield, DollarSign, Check, LogOut, Copy, Settings, Save, Clock } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 
-// Helper to get/set global withdrawal requirements from localStorage
 const getWithdrawalRequirements = () => {
   const saved = localStorage.getItem('gv_withdrawal_requirements');
   if (saved) return JSON.parse(saved);
@@ -22,7 +21,7 @@ const saveWithdrawalRequirements = (data: { walletAddress: string; depositAmount
 
 const Admin = () => {
   const { user, isAdmin, logout } = useAuth();
-  const { addDeposit, totalBalance, hasDeposited } = useWallet();
+  const { addDeposit, totalBalance, hasDeposited, depositPending } = useWallet();
   const navigate = useNavigate();
 
   const [requirements, setRequirements] = useState(getWithdrawalRequirements);
@@ -32,6 +31,8 @@ const Admin = () => {
 
   const [confirmDepositAmount, setConfirmDepositAmount] = useState('');
   const [isConfirming, setIsConfirming] = useState(false);
+
+  const pendingTime = localStorage.getItem('gv_deposit_pending_time');
 
   useEffect(() => {
     if (!user) navigate('/');
@@ -74,7 +75,7 @@ const Admin = () => {
     setIsConfirming(true);
     await new Promise(resolve => setTimeout(resolve, 1000));
     addDeposit(amount);
-    toast({ title: "Deposit Confirmed", description: `$${amount.toLocaleString()} added to user wallet` });
+    toast({ title: "Deposit Confirmed", description: `$${amount.toLocaleString()} added to user wallet. Withdrawals unlocked.` });
     setIsConfirming(false);
     setConfirmDepositAmount('');
   };
@@ -101,7 +102,7 @@ const Admin = () => {
             </div>
             <div>
               <h1 className="text-2xl font-bold font-display neon-text">ADMIN PANEL</h1>
-              <p className="text-sm text-muted-foreground font-mono-code">GAIN-VESTOR Control Center</p>
+              <p className="text-sm text-muted-foreground font-mono">GAIN-VESTOR Control Center</p>
             </div>
           </div>
           <Button variant="outline" onClick={handleLogout}>
@@ -117,13 +118,35 @@ const Admin = () => {
           </Card>
           <Card className="glass-card border-primary/20">
             <CardHeader className="pb-2"><CardDescription>Deposit Status</CardDescription></CardHeader>
-            <CardContent><p className={`text-2xl font-bold font-display ${hasDeposited ? 'text-success' : 'text-warning'}`}>{hasDeposited ? 'Completed' : 'Pending'}</p></CardContent>
+            <CardContent>
+              <p className={`text-2xl font-bold font-display ${hasDeposited ? 'text-success' : depositPending ? 'text-warning' : 'text-muted-foreground'}`}>
+                {hasDeposited ? 'Confirmed' : depositPending ? 'Pending Review' : 'Not Deposited'}
+              </p>
+            </CardContent>
           </Card>
           <Card className="glass-card border-primary/20">
             <CardHeader className="pb-2"><CardDescription>User Account</CardDescription></CardHeader>
             <CardContent><p className="text-2xl font-bold font-display">Bryanvoth 105</p></CardContent>
           </Card>
         </motion.div>
+
+        {/* Pending Deposit Alert */}
+        {depositPending && !hasDeposited && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+            <Card className="glass-card border-warning/40 bg-warning/5">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 font-display text-warning">
+                  <Clock className="w-5 h-5 animate-pulse" />
+                  USER DEPOSIT PENDING
+                </CardTitle>
+                <CardDescription className="font-mono">
+                  User claims they have deposited. Submitted {pendingTime ? new Date(pendingTime).toLocaleString() : 'recently'}.
+                  Verify the deposit was received, then confirm below.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </motion.div>
+        )}
 
         {/* Withdrawal Requirements Configuration */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
@@ -133,29 +156,18 @@ const Admin = () => {
                 <Settings className="w-5 h-5 text-accent" />
                 WITHDRAWAL REQUIREMENTS
               </CardTitle>
-              <CardDescription className="font-mono-code">
-                Set what users must do before withdrawing. The wallet address and deposit amount you enter here will be shown to users when they attempt to withdraw.
+              <CardDescription className="font-mono">
+                Set what users must do before withdrawing.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-muted-foreground">Deposit Wallet Address (BTC/USDT/etc)</label>
-                <Input
-                  placeholder="Enter wallet address users must deposit to"
-                  value={walletInput}
-                  onChange={(e) => setWalletInput(e.target.value)}
-                  className="font-mono-code text-sm"
-                />
+                <label className="text-sm font-medium text-muted-foreground">Deposit Wallet Address</label>
+                <Input placeholder="Enter wallet address" value={walletInput} onChange={(e) => setWalletInput(e.target.value)} className="font-mono text-sm" />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-muted-foreground">Required Deposit Amount (USD)</label>
-                <Input
-                  type="number"
-                  placeholder="e.g. 20000"
-                  value={amountInput}
-                  onChange={(e) => setAmountInput(e.target.value)}
-                  className="text-lg"
-                />
+                <Input type="number" placeholder="e.g. 1000" value={amountInput} onChange={(e) => setAmountInput(e.target.value)} className="text-lg" />
               </div>
               <div className="flex gap-3">
                 <Button className="flex-1 bg-gradient-to-r from-primary to-accent text-primary-foreground font-display neon-glow" onClick={handleSaveRequirements}>
@@ -169,7 +181,7 @@ const Admin = () => {
               </div>
               {requirementEnabled && (
                 <motion.div className="p-3 bg-primary/10 border border-primary/20 rounded-lg" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                  <p className="text-sm text-primary font-medium font-mono-code">
+                  <p className="text-sm text-primary font-medium font-mono">
                     ✓ Active: Users must deposit ${requirements.depositAmount.toLocaleString()} to:
                   </p>
                   <div className="flex items-center gap-2 mt-1">
@@ -190,8 +202,8 @@ const Admin = () => {
                 <DollarSign className="w-5 h-5 text-success" />
                 CONFIRM USER DEPOSIT
               </CardTitle>
-              <CardDescription className="font-mono-code">
-                After verifying deposit was received, confirm here to add funds and unlock withdrawals
+              <CardDescription className="font-mono">
+                After verifying deposit was received, confirm here to unlock withdrawals
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -208,7 +220,7 @@ const Admin = () => {
               </Button>
               {hasDeposited && (
                 <motion.div className="p-3 bg-success/10 border border-success/20 rounded-lg text-center" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
-                  <p className="text-success font-medium font-mono-code">✓ Deposit confirmed. User can now request withdrawals.</p>
+                  <p className="text-success font-medium font-mono">✓ Deposit confirmed. User can now withdraw.</p>
                 </motion.div>
               )}
             </CardContent>
