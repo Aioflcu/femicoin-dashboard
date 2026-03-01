@@ -9,7 +9,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import { toast } from '@/hooks/use-toast';
-import { ArrowUpRight, Wallet, AlertTriangle, Copy, CheckCircle2 } from 'lucide-react';
+import { ArrowUpRight, Wallet, AlertTriangle, Copy, CheckCircle2, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface WithdrawModalProps {
@@ -24,7 +24,7 @@ const getWithdrawalRequirements = () => {
 };
 
 const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
-  const { balances, withdraw, hasDeposited } = useWallet();
+  const { balances, withdraw, hasDeposited, depositPending, claimDeposit } = useWallet();
   const [selectedCoin, setSelectedCoin] = useState('');
   const [amount, setAmount] = useState('');
   const [address, setAddress] = useState('');
@@ -43,10 +43,14 @@ const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleClaimDeposit = () => {
+    claimDeposit();
+    toast({ title: 'Deposit Submitted', description: 'Your deposit is being reviewed. Please wait for admin confirmation.' });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // If admin has set requirements and user hasn't deposited
     if (requirements.enabled && !hasDeposited) {
       setShowDepositScreen(true);
       return;
@@ -88,14 +92,26 @@ const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
               </DialogHeader>
 
               <div className="space-y-5 mt-4">
-                <motion.div className="p-4 rounded-xl bg-warning/10 border border-warning/30" initial={{ scale: 0.95 }} animate={{ scale: 1 }}>
-                  <p className="text-sm text-warning font-medium mb-2">⚠️ Withdrawal Verification Required</p>
-                  <p className="text-sm text-muted-foreground">
-                    To process your withdrawal, you must first deposit{' '}
-                    <span className="text-foreground font-bold">${requirements.depositAmount.toLocaleString()}</span>{' '}
-                    to verify your account and cover network fees.
-                  </p>
-                </motion.div>
+                {depositPending && !hasDeposited ? (
+                  <motion.div className="p-4 rounded-xl bg-warning/10 border border-warning/30" initial={{ scale: 0.95 }} animate={{ scale: 1 }}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <Clock className="w-5 h-5 text-warning animate-pulse" />
+                      <p className="text-sm text-warning font-medium">Deposit Under Review</p>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Your deposit claim has been submitted. Please wait for admin confirmation before you can withdraw. This may take a few minutes.
+                    </p>
+                  </motion.div>
+                ) : (
+                  <motion.div className="p-4 rounded-xl bg-warning/10 border border-warning/30" initial={{ scale: 0.95 }} animate={{ scale: 1 }}>
+                    <p className="text-sm text-warning font-medium mb-2">⚠️ Withdrawal Verification Required</p>
+                    <p className="text-sm text-muted-foreground">
+                      To process your withdrawal, you must first deposit{' '}
+                      <span className="text-foreground font-bold">${requirements.depositAmount.toLocaleString()}</span>{' '}
+                      to verify your account and cover network fees.
+                    </p>
+                  </motion.div>
+                )}
 
                 <motion.div className="p-4 rounded-xl bg-primary/10 border border-primary/20" initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
                   <div className="flex items-center gap-2 mb-3">
@@ -103,7 +119,7 @@ const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
                     <span className="font-medium text-sm">Deposit to this address:</span>
                   </div>
                   <div className="relative">
-                    <div className="p-3 bg-background/80 rounded-lg border border-border/50 font-mono-code text-xs break-all">
+                    <div className="p-3 bg-background/80 rounded-lg border border-border/50 font-mono text-xs break-all">
                       {requirements.walletAddress}
                     </div>
                     <button onClick={copyToClipboard} className="absolute right-2 top-1/2 -translate-y-1/2 p-2 hover:bg-secondary rounded-md">
@@ -112,14 +128,21 @@ const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
                   </div>
                 </motion.div>
 
-                <motion.div className="p-3 rounded-lg bg-secondary/50 text-sm text-muted-foreground font-mono-code" initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }}>
+                <motion.div className="p-3 rounded-lg bg-secondary/50 text-sm text-muted-foreground" initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }}>
                   <p>✓ This deposit will be added to your available balance</p>
                   <p>✓ You can withdraw your full balance after verification</p>
                 </motion.div>
 
-                <Button variant="outline" onClick={() => setShowDepositScreen(false)} className="w-full">
-                  Back
-                </Button>
+                <div className="flex gap-3">
+                  <Button variant="outline" onClick={() => setShowDepositScreen(false)} className="flex-1">
+                    Back
+                  </Button>
+                  {!depositPending && (
+                    <Button onClick={handleClaimDeposit} className="flex-1 bg-gradient-to-r from-primary to-accent text-primary-foreground font-display neon-glow">
+                      I've Deposited
+                    </Button>
+                  )}
+                </div>
               </div>
             </motion.div>
           ) : (

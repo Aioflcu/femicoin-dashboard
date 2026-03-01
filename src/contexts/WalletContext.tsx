@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 export interface Transaction {
   id: string;
@@ -24,9 +24,11 @@ interface WalletContextType {
   transactions: Transaction[];
   totalBalance: number;
   hasDeposited: boolean;
+  depositPending: boolean;
   withdraw: (coin: string, amount: number, address: string) => void;
   executeTrade: (type: 'buy' | 'sell' | 'swap', coin: string, amount: number, price: number, coinName: string, coinImage: string) => void;
   addDeposit: (usdAmount: number) => void;
+  claimDeposit: () => void;
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
@@ -50,12 +52,33 @@ const initialTransactions: Transaction[] = [
 export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [balances, setBalances] = useState<WalletBalance[]>(initialBalances);
   const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
-  const [hasDeposited, setHasDeposited] = useState(false);
+  const [hasDeposited, setHasDeposited] = useState(() => {
+    return localStorage.getItem('gv_deposit_confirmed') === 'true';
+  });
+  const [depositPending, setDepositPending] = useState(() => {
+    return localStorage.getItem('gv_deposit_pending') === 'true';
+  });
+
+  // Sync hasDeposited from localStorage (admin confirms it)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const confirmed = localStorage.getItem('gv_deposit_confirmed') === 'true';
+      if (confirmed !== hasDeposited) setHasDeposited(confirmed);
+      const pending = localStorage.getItem('gv_deposit_pending') === 'true';
+      if (pending !== depositPending) setDepositPending(pending);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [hasDeposited, depositPending]);
 
   const totalBalance = balances.reduce((sum, b) => sum + b.usdValue, 0);
 
+  const claimDeposit = () => {
+    localStorage.setItem('gv_deposit_pending', 'true');
+    localStorage.setItem('gv_deposit_pending_time', new Date().toISOString());
+    setDepositPending(true);
+  };
+
   const addDeposit = (usdAmount: number) => {
-    // Add deposit to USDT balance
     setBalances(prev => prev.map(b => {
       if (b.symbol === 'USDT') {
         return { ...b, amount: b.amount + usdAmount, usdValue: b.usdValue + usdAmount };
@@ -63,7 +86,6 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       return b;
     }));
 
-    // Record the deposit transaction
     const newTransaction: Transaction = {
       id: Date.now().toString(),
       type: 'received',
@@ -75,7 +97,10 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     };
 
     setTransactions(prev => [newTransaction, ...prev]);
+    localStorage.setItem('gv_deposit_confirmed', 'true');
+    localStorage.removeItem('gv_deposit_pending');
     setHasDeposited(true);
+    setDepositPending(false);
   };
 
   const withdraw = (coin: string, amount: number, address: string) => {
@@ -116,91 +141,39 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const usdValue = amount * price;
 
     if (type === 'buy') {
-      // Deduct USDT and add the coin
       setBalances(prev => {
         const updated = prev.map(b => {
-          if (b.symbol === 'USDT') {
-            return { ...b, amount: b.amount - usdValue, usdValue: b.usdValue - usdValue };
-          }
-          if (b.symbol === coin) {
-            return { ...b, amount: b.amount + amount, usdValue: b.usdValue + usdValue };
-          }
+          if (b.symbol === 'USDT') return { ...b, amount: b.amount - usdValue, usdValue: b.usdValue - usdValue };
+          if (b.symbol === coin) return { ...b, amount: b.amount + amount, usdValue: b.usdValue + usdValue };
           return b;
         });
-        
-        // If coin doesn't exist in balances, add it
         const coinExists = updated.some(b => b.symbol === coin);
-        if (!coinExists) {
-          updated.push({
-            coin: coinName,
-            symbol: coin,
-            amount,
-            usdValue,
-            image: coinImage,
-          });
-        }
-        
+        if (!coinExists) updated.push({ coin: coinName, symbol: coin, amount, usdValue, image: coinImage });
         return updated;
       });
-
-      setTransactions(prev => [{
-        id: Date.now().toString(),
-        type: 'bought',
-        coin,
-        amount,
-        usdValue,
-        status: 'success',
-        date: new Date().toISOString(),
-      }, ...prev]);
+      setTransactions(prev => [{ id: Date.now().toString(), type: 'bought', coin, amount, usdValue, status: 'success', date: new Date().toISOString() }, ...prev]);
     }
 
     if (type === 'sell') {
-      // Add USDT and deduct the coin
       setBalances(prev => prev.map(b => {
-        if (b.symbol === 'USDT') {
-          return { ...b, amount: b.amount + usdValue, usdValue: b.usdValue + usdValue };
-        }
-        if (b.symbol === coin) {
-          return { ...b, amount: b.amount - amount, usdValue: b.usdValue - usdValue };
-        }
+        if (b.symbol === 'USDT') return { ...b, amount: b.amount + usdValue, usdValue: b.usdValue + usdValue };
+        if (b.symbol === coin) return { ...b, amount: b.amount - amount, usdValue: b.usdValue - usdValue };
         return b;
       }).filter(b => b.amount > 0));
-
-      setTransactions(prev => [{
-        id: Date.now().toString(),
-        type: 'sold',
-        coin,
-        amount,
-        usdValue,
-        status: 'success',
-        date: new Date().toISOString(),
-      }, ...prev]);
+      setTransactions(prev => [{ id: Date.now().toString(), type: 'sold', coin, amount, usdValue, status: 'success', date: new Date().toISOString() }, ...prev]);
     }
 
     if (type === 'swap') {
-      // For swap, we only deduct the "from" coin here
-      // The "to" coin is added separately via another executeTrade call
       setBalances(prev => prev.map(b => {
-        if (b.symbol === coin) {
-          return { ...b, amount: b.amount - amount, usdValue: b.usdValue - usdValue };
-        }
+        if (b.symbol === coin) return { ...b, amount: b.amount - amount, usdValue: b.usdValue - usdValue };
         return b;
       }).filter(b => b.amount > 0));
-
-      setTransactions(prev => [{
-        id: Date.now().toString(),
-        type: 'swapped',
-        coin: coinName, // This will be "BTC → ETH" format
-        amount,
-        usdValue,
-        status: 'success',
-        date: new Date().toISOString(),
-      }, ...prev]);
+      setTransactions(prev => [{ id: Date.now().toString(), type: 'swapped', coin: coinName, amount, usdValue, status: 'success', date: new Date().toISOString() }, ...prev]);
     }
   };
 
   return (
-    <WalletContext.Provider value={{ balances, transactions, totalBalance, hasDeposited, withdraw, executeTrade, addDeposit }}>
+    <WalletContext.Provider value={{ balances, transactions, totalBalance, hasDeposited, depositPending, withdraw, executeTrade, addDeposit, claimDeposit }}>
       {children}
     </WalletContext.Provider>
   );
@@ -208,8 +181,6 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
 export const useWallet = () => {
   const context = useContext(WalletContext);
-  if (!context) {
-    throw new Error('useWallet must be used within a WalletProvider');
-  }
+  if (!context) throw new Error('useWallet must be used within a WalletProvider');
   return context;
 };
