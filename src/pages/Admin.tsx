@@ -126,7 +126,7 @@ const Admin = () => {
           </Card>
           <Card className="glass-card border-primary/20">
             <CardHeader className="pb-2"><CardDescription>User Account</CardDescription></CardHeader>
-            <CardContent><p className="text-2xl font-bold font-display">Bryanvoth 105</p></CardContent>
+            <CardContent><p className="text-2xl font-bold font-display">Catherine Archer</p></CardContent>
           </Card>
         </motion.div>
 
