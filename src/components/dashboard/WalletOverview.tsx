@@ -51,7 +51,7 @@ const WalletOverview = () => {
         {/* Balance Section */}
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
-            <h2 className="text-sm font-medium text-muted-foreground">Total Balance</h2>
+            <h2 className="text-sm font-medium text-muted-foreground">Demo Balance</h2>
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}

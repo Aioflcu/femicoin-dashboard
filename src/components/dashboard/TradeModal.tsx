@@ -130,7 +130,7 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
       executeTrade('buy', selectedCoin, parseFloat(amount), price, coinData?.name || selectedCoin, coinData?.image || '');
       
       toast({ 
-        title: 'Trade Successful!', 
+        title: 'Demo Trade Complete!', 
         description: `Bought ${amount} ${selectedCoin} for $${total.toFixed(2)}`,
       });
       
@@ -166,7 +166,7 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
       executeTrade('sell', selectedCoin, parseFloat(amount), price, coinData?.name || selectedCoin, coinData?.image || '');
       
       toast({ 
-        title: 'Trade Successful!', 
+        title: 'Demo Trade Complete!', 
         description: `Sold ${amount} ${selectedCoin} for $${total.toFixed(2)}`,
       });
       
@@ -212,7 +212,7 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
       executeTrade('buy', swapToCoin, toAmount, toPrice, toCoinData?.name || swapToCoin, toCoinData?.image || '');
       
       toast({ 
-        title: 'Swap Successful!', 
+        title: 'Demo Swap Complete!', 
         description: `Swapped ${amount} ${swapFromCoin} for ${toAmount.toFixed(6)} ${swapToCoin}`,
       });
       
@@ -244,7 +244,7 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
             >
               <Loader2 className="w-12 h-12 text-primary animate-spin" />
               <p className="text-lg font-medium">Processing Trade...</p>
-              <p className="text-sm text-muted-foreground">Connecting to exchange</p>
+              <p className="text-sm text-muted-foreground">Simulating order execution</p>
             </motion.div>
           )}
           
@@ -261,7 +261,7 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
                 <ArrowRightLeft className="w-12 h-12 text-primary" />
               </motion.div>
               <p className="text-lg font-medium">Confirming Transaction...</p>
-              <p className="text-sm text-muted-foreground">Verifying on blockchain</p>
+              <p className="text-sm text-muted-foreground">Updating simulated holdings</p>
             </motion.div>
           )}
           
@@ -278,8 +278,8 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
               >
                 <CheckCircle className="w-16 h-16 text-success" />
               </motion.div>
-              <p className="text-lg font-medium text-success">Trade Successful!</p>
-              <p className="text-sm text-muted-foreground">Your balance has been updated</p>
+              <p className="text-lg font-medium text-success">Demo Trade Complete!</p>
+              <p className="text-sm text-muted-foreground">Your demo balance has been updated</p>
             </motion.div>
           )}
           
@@ -303,7 +303,7 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl font-display">Trade Crypto</DialogTitle>
+          <DialogTitle className="text-xl font-display">Demo Trade</DialogTitle>
         </DialogHeader>
         
         <div className="relative">

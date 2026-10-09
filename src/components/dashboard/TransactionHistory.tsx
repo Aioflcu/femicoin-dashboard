@@ -39,7 +39,7 @@ const TransactionHistory = () => {
   return (
     <div className="glass-card rounded-2xl p-6 animate-fade-in" style={{ animationDelay: '0.3s' }}>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-display font-semibold">Recent Transactions</h2>
+        <h2 className="text-xl font-display font-semibold">Demo Transactions</h2>
         <button className="text-sm text-primary hover:underline">View All</button>
       </div>
 
@@ -77,7 +77,7 @@ const TransactionHistory = () => {
                       : 'bg-warning/20 text-warning'
                   }`}
                 >
-                  {tx.status === 'pending' ? 'Reviewing withdrawal processing……' : tx.status}
+                  {tx.status === 'pending' ? 'Simulated review' : 'Simulated'}
                 </span>
               </div>
             </div>
