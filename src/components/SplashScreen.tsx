@@ -106,7 +106,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
                 GAIN-VESTOR
               </motion.h1>
               <motion.p className="text-sm text-muted-foreground mt-2 tracking-[0.3em] font-mono-code" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}>
-                SMART CRYPTO PORTFOLIO
+                DEMO CRYPTO PORTFOLIO
               </motion.p>
             </motion.div>
 

@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { simulateWithdrawal } from '@/lib/demo-wallet';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 export interface Transaction {
   id: string;
@@ -23,12 +24,8 @@ interface WalletContextType {
   balances: WalletBalance[];
   transactions: Transaction[];
   totalBalance: number;
-  hasDeposited: boolean;
-  depositPending: boolean;
-  withdraw: (coin: string, amount: number, address: string) => void;
+  withdraw: (coin: string, amount: number) => boolean;
   executeTrade: (type: 'buy' | 'sell' | 'swap', coin: string, amount: number, price: number, coinName: string, coinImage: string) => void;
-  addDeposit: (usdAmount: number) => void;
-  claimDeposit: () => void;
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
@@ -52,82 +49,14 @@ const initialTransactions: Transaction[] = [
 export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [balances, setBalances] = useState<WalletBalance[]>(initialBalances);
   const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
-  const [hasDeposited, setHasDeposited] = useState(() => {
-    return localStorage.getItem('gv_deposit_confirmed') === 'true';
-  });
-  const [depositPending, setDepositPending] = useState(() => {
-    return localStorage.getItem('gv_deposit_pending') === 'true';
-  });
-
-  // Sync hasDeposited from localStorage (admin confirms it)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const confirmed = localStorage.getItem('gv_deposit_confirmed') === 'true';
-      if (confirmed !== hasDeposited) setHasDeposited(confirmed);
-      const pending = localStorage.getItem('gv_deposit_pending') === 'true';
-      if (pending !== depositPending) setDepositPending(pending);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [hasDeposited, depositPending]);
-
   const totalBalance = balances.reduce((sum, b) => sum + b.usdValue, 0);
 
-  const claimDeposit = () => {
-    localStorage.setItem('gv_deposit_pending', 'true');
-    localStorage.setItem('gv_deposit_pending_time', new Date().toISOString());
-    setDepositPending(true);
-  };
-
-  const addDeposit = (usdAmount: number) => {
-    setBalances(prev => prev.map(b => {
-      if (b.symbol === 'USDT') {
-        return { ...b, amount: b.amount + usdAmount, usdValue: b.usdValue + usdAmount };
-      }
-      return b;
-    }));
-
-    const newTransaction: Transaction = {
-      id: Date.now().toString(),
-      type: 'received',
-      coin: 'USDT',
-      amount: usdAmount,
-      usdValue: usdAmount,
-      status: 'success',
-      date: new Date().toISOString(),
-    };
-
-    setTransactions(prev => [newTransaction, ...prev]);
-    localStorage.setItem('gv_deposit_confirmed', 'true');
-    localStorage.removeItem('gv_deposit_pending');
-    setHasDeposited(true);
-    setDepositPending(false);
-  };
-
-  const withdraw = (coin: string, amount: number, address: string) => {
-    const balance = balances.find(b => b.symbol === coin);
-    if (!balance || balance.amount < amount) return;
-
-    const pricePerUnit = balance.usdValue / balance.amount;
-    const usdValue = amount * pricePerUnit;
-
-    setBalances(prev => prev.map(b => 
-      b.symbol === coin 
-        ? { ...b, amount: b.amount - amount, usdValue: b.usdValue - usdValue }
-        : b
-    ));
-
-    const newTransaction: Transaction = {
-      id: Date.now().toString(),
-      type: 'withdrawn',
-      coin,
-      amount,
-      usdValue,
-      status: 'pending',
-      date: new Date().toISOString(),
-      address,
-    };
-
-    setTransactions(prev => [newTransaction, ...prev]);
+  const withdraw = (coin: string, amount: number) => {
+    const result = simulateWithdrawal(balances, coin, amount);
+    if (!result) return false;
+    setBalances(result.balances);
+    setTransactions(prev => [result.transaction, ...prev]);
+    return true;
   };
 
   const executeTrade = (
@@ -173,7 +102,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   };
 
   return (
-    <WalletContext.Provider value={{ balances, transactions, totalBalance, hasDeposited, depositPending, withdraw, executeTrade, addDeposit, claimDeposit }}>
+    <WalletContext.Provider value={{ balances, transactions, totalBalance, withdraw, executeTrade }}>
       {children}
     </WalletContext.Provider>
   );

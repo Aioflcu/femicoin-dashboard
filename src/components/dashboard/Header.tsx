@@ -82,6 +82,9 @@ const Header = () => {
           </DropdownMenu>
         </div>
       </div>
+      <div role="note" className="border-t border-border/50 bg-primary/10 px-4 py-2 text-center text-xs text-foreground">
+        <strong>DEMO ONLY</strong> · Simulated funds · No real money or transfers
+      </div>
     </header>
   );
 };

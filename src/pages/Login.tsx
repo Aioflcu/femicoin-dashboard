@@ -11,7 +11,7 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login, isAdmin } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,10 +26,7 @@ const Login = () => {
     setIsLoading(false);
     if (success) {
       toast({ title: 'Welcome back', description: `Logged in as ${username}` });
-      // Check role after login
-      const saved = localStorage.getItem('gv_user');
-      const user = saved ? JSON.parse(saved) : null;
-      navigate(user?.role === 'admin' ? '/admin' : '/dashboard');
+      navigate('/dashboard');
     } else {
       toast({ title: 'Login failed', description: 'Invalid credentials', variant: 'destructive' });
     }
@@ -77,9 +74,11 @@ const Login = () => {
             GAIN-VESTOR
           </h1>
           <p className="text-xs text-muted-foreground mt-1 tracking-widest uppercase">
-            Secure Access
+            Demo Access
           </p>
         </div>
+
+        <p className="text-sm text-muted-foreground text-center mb-5">Demo only. Balances and trades are simulated; no real money can be sent or received.</p>
 
         {/* Login Card */}
         <div className="glass-card rounded-2xl p-6 space-y-5" style={{ boxShadow: '0 0 40px hsl(var(--primary) / 0.05)' }}>
@@ -132,7 +131,7 @@ const Login = () => {
 
           <div className="pt-3 border-t border-border/30 text-center">
             <p className="text-[10px] text-muted-foreground/60 uppercase tracking-widest">
-              Protected by GAIN-VESTOR Security
+              Simulation only · No real funds
             </p>
           </div>
         </div>
