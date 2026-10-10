@@ -1,3 +1,3 @@
 # Architecture rules
-- Keep the demo wallet client-side and never connect its transactions to payments or blockchain transfers, because this app only simulates funds.
-- Use a single client-only demo session without administrator roles, because there is no administrative workflow.
+- Keep wallet operations client-side and avoid introducing fake financial flows into the app.
+- Use a single authenticated user session and keep state consistent with the app's actual workflow.

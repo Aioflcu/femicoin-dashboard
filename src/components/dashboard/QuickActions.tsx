@@ -6,7 +6,7 @@ import WithdrawModal from './WithdrawModal';
 import TradeModal from './TradeModal';
 
 const actions = [
-  { id: 'send', label: 'Demo withdrawal', icon: ArrowUpRight, color: 'from-blue-500 to-blue-600' },
+  { id: 'send', label: 'Withdraw', icon: ArrowUpRight, color: 'from-blue-500 to-blue-600' },
   { id: 'buy', label: 'Buy', icon: ShoppingCart, color: 'from-purple-500 to-purple-600' },
   { id: 'sell', label: 'Sell', icon: CreditCard, color: 'from-orange-500 to-orange-600' },
   { id: 'swap', label: 'Swap', icon: RefreshCw, color: 'from-cyan-500 to-cyan-600' },
