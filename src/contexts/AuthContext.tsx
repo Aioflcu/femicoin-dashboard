@@ -20,7 +20,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const USER_CREDENTIALS = { username: 'Catherine Archer', password: 'archer2024' };
+const USER_CREDENTIALS = { username: 'Linda Kate Peter', password: 'linda2024' };
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
