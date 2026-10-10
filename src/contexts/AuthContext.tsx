@@ -42,8 +42,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const isAuthenticated = !!user;
 
   const login = (username: string, password: string): boolean => {
-    if (username === USER_CREDENTIALS.username && password === USER_CREDENTIALS.password) {
-      const u: User = { username, profile: { displayName: username, profilePicture: '' } };
+    const norm = (s: string) => s.trim().replace(/\s+/g, ' ').toLowerCase();
+    if (norm(username) === norm(USER_CREDENTIALS.username) && password.trim() === USER_CREDENTIALS.password) {
+      const u: User = { username: USER_CREDENTIALS.username, profile: { displayName: USER_CREDENTIALS.username, profilePicture: '' } };
       setUser(u);
       sessionStorage.setItem('gv_demo_user', JSON.stringify(u));
       return true;
