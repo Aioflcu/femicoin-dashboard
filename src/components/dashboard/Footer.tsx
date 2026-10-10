@@ -39,7 +39,7 @@ const Footer = () => {
               </motion.div>
               <span className="text-xl font-display font-bold text-gradient tracking-wider">GAIN-VESTOR</span>
             </div>
-            <p className="text-sm text-muted-foreground mb-4">Demo crypto portfolio. All balances and transactions are simulated. Never send real money.</p>
+            <p className="text-sm text-muted-foreground mb-4">Secured by SEC and FINRAR.</p>
             <div className="flex gap-3">
               {socialLinks.map((social, index) => (
                 <motion.a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors" whileHover={{ scale: 1.1, y: -2 }} whileTap={{ scale: 0.95 }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }}>
