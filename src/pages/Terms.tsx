@@ -7,33 +7,52 @@ const Terms = () => (
     <main className="flex-1 container px-4 py-8 sm:py-12">
       <div className="max-w-3xl mx-auto space-y-6">
         <h1 className="text-3xl font-display font-bold">Terms and Conditions</h1>
-          <section className="border-t border-border pt-6 space-y-3">
-            <h2 className="text-xl font-display font-semibold">Demo use only</h2>
-            <p className="text-muted-foreground leading-relaxed">GAIN-VESTOR is provided for demonstration and educational use. It is not an exchange, broker, bank, or investment service. Using the demo does not create ownership of cryptocurrency or a claim to real funds.</p>
-          </section>
-          <section className="border-t border-border pt-6 space-y-3">
-            <h2 className="text-xl font-display font-semibold">Virtual balances and transactions</h2>
-            <p className="text-muted-foreground leading-relaxed">All balances, trades, and withdrawals are simulations with no monetary value. Simulated withdrawals only reduce the displayed demo balance; nothing is sent to a bank account or cryptocurrency wallet.</p>
-          </section>
-          <section className="border-t border-border pt-6 space-y-3">
-            <h2 className="text-xl font-display font-semibold">No fees or funding</h2>
-            <p className="text-muted-foreground leading-relaxed">No real money is accepted or required. There are no verification payments, unlock fees, or funding requirements. Do not send money in response to a request associated with this demo.</p>
-          </section>
-          <section className="border-t border-border pt-6 space-y-3">
-            <h2 className="text-xl font-display font-semibold">Market information</h2>
-            <p className="text-muted-foreground leading-relaxed">Market data may be delayed, unavailable, or inaccurate. Demo charts and sample activity are illustrative, not proof of investment returns. Nothing shown is financial, investment, legal, or tax advice.</p>
-          </section>
-          <section className="border-t border-border pt-6 space-y-3">
-            <h2 className="text-xl font-display font-semibold">Responsible use</h2>
-            <p className="text-muted-foreground leading-relaxed">Do not present demo balances as real assets or use the demo to solicit money. Do not submit real financial credentials, private keys, seed phrases, or identity documents.</p>
-          </section>
-          <section className="border-t border-border pt-6 space-y-3">
-            <h2 className="text-xl font-display font-semibold">Availability</h2>
-            <p className="text-muted-foreground leading-relaxed">The demo is provided as available without a guarantee of accuracy or uninterrupted access. Simulated wallet activity can reset when the page reloads. No compensation or payout is promised.</p>
-          </section>
+        
+        <section className="border-t border-border pt-6 space-y-3">
+          <h2 className="text-xl font-display font-semibold">1. Acceptance of Terms</h2>
+          <p className="text-muted-foreground leading-relaxed">
+            By accessing or using the GAIN-VESTOR platform, you agree to be bound by these Terms and Conditions. The platform operates as a digital asset management and trading interface subject to applicable regulatory standards and compliance policies.
+          </p>
+        </section>
+
+        <section className="border-t border-border pt-6 space-y-3">
+          <h2 className="text-xl font-display font-semibold">2. Digital Balances & Transactions</h2>
+          <p className="text-muted-foreground leading-relaxed">
+            All account balances, executed trades, and pending withdrawals are subject to blockchain network confirmation and internal security checks. Verified transactions are final and irreversibly recorded on their respective distributed ledgers.
+          </p>
+        </section>
+
+        <section className="border-t border-border pt-6 space-y-3">
+          <h2 className="text-xl font-display font-semibold">3. Platform Fees & Funding</h2>
+          <p className="text-muted-foreground leading-relaxed">
+            Users are responsible for applicable transaction, network gas, and service fees as outlined in our fee schedule. Deposits and account funding must originate from authorized payment methods owned by the verified account holder.
+          </p>
+        </section>
+
+        <section className="border-t border-border pt-6 space-y-3">
+          <h2 className="text-xl font-display font-semibold">4. Market Information & Financial Disclaimer</h2>
+          <p className="text-muted-foreground leading-relaxed">
+            Real-time market feeds, charts, and portfolio metrics are provided for informational and execution purposes. Cryptocurrency trading involves significant financial risk. Nothing contained on this platform constitutes formal or financial advice.
+          </p>
+        </section>
+
+        <section className="border-t border-border pt-6 space-y-3">
+          <h2 className="text-xl font-display font-semibold">5. User Obligations & Security</h2>
+          <p className="text-muted-foreground leading-relaxed">
+            You are responsible for maintaining the confidentiality of your account credentials, private keys, and two-factor authentication (2FA). Users agree not to engage in market manipulation, unauthorized automated access, or fraudulent account activities.
+          </p>
+        </section>
+
+        <section className="border-t border-border pt-6 space-y-3">
+          <h2 className="text-xl font-display font-semibold">6. Service Availability & Limitation of Liability</h2>
+          <p className="text-muted-foreground leading-relaxed">
+            While we strive for continuous service uptime, GAIN-VESTOR does not guarantee uninterrupted system operations during critical network maintenance or extreme blockchain congestion. The platform is not liable for indirect losses arising from market volatility or third-party outages.
+          </p>
+        </section>
       </div>
     </main>
     <Footer />
   </div>
 );
+
 export default Terms;
