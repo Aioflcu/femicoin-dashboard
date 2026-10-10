@@ -74,11 +74,11 @@ const Login = () => {
             GAIN-VESTOR
           </h1>
           <p className="text-xs text-muted-foreground mt-1 tracking-widest uppercase">
-            Demo Access
+            GAIN-VESTOR
           </p>
         </div>
 
-        <p className="text-sm text-muted-foreground text-center mb-5">Demo only. Balances and trades are simulated; no real money can be sent or received.</p>
+        <p className="text-sm text-muted-foreground text-center mb-5"> Tradr Wisely.</p>
 
         {/* Login Card */}
         <div className="glass-card rounded-2xl p-6 space-y-5" style={{ boxShadow: '0 0 40px hsl(var(--primary) / 0.05)' }}>
@@ -131,7 +131,7 @@ const Login = () => {
 
           <div className="pt-3 border-t border-border/30 text-center">
             <p className="text-[10px] text-muted-foreground/60 uppercase tracking-widest">
-              Simulation only · No real funds
+              Secured by SEC · Trade wisely
             </p>
           </div>
         </div>
