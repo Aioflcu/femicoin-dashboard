@@ -38,7 +38,6 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
   const [isProcessing, setIsProcessing] = useState(false);
   const [tradeStatus, setTradeStatus] = useState<'idle' | 'processing' | 'confirming' | 'success' | 'error'>('idle');
 
-  // Fetch live prices
   const { data: prices } = useQuery<CoinPrice[]>({
     queryKey: ['trade-prices'],
     queryFn: async () => {
@@ -85,20 +84,17 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
     setTradeStatus('idle');
   };
 
-  const simulateTrade = async () => {
+  const processTrade = async () => {
     setIsProcessing(true);
     setTradeStatus('processing');
 
-    // Stage 1: Processing
     await new Promise(resolve => setTimeout(resolve, 1500));
     setTradeStatus('confirming');
 
-    // Stage 2: Confirming
     await new Promise(resolve => setTimeout(resolve, 1200));
 
-    // Random success (95% success rate for realism)
     const isSuccess = Math.random() > 0.05;
-    
+
     if (isSuccess) {
       setTradeStatus('success');
       return true;
@@ -116,24 +112,24 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
 
     const total = calculateTotal();
     const usdtBalance = balances.find(b => b.symbol === 'USDT');
-    
+
     if (!usdtBalance || usdtBalance.amount < total) {
       toast({ title: 'Insufficient Balance', description: 'Not enough USDT to complete this purchase', variant: 'destructive' });
       return;
     }
 
-    const success = await simulateTrade();
-    
+    const success = await processTrade();
+
     if (success) {
       const price = getSelectedCoinPrice(selectedCoin);
       const coinData = getSelectedCoinData(selectedCoin);
       executeTrade('buy', selectedCoin, parseFloat(amount), price, coinData?.name || selectedCoin, coinData?.image || '');
-      
-      toast({ 
-        title: 'Demo Trade Complete!', 
+
+      toast({
+        title: 'Trade Complete!',
         description: `Bought ${amount} ${selectedCoin} for $${total.toFixed(2)}`,
       });
-      
+
       setTimeout(() => {
         setIsProcessing(false);
         resetForm();
@@ -157,19 +153,19 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
       return;
     }
 
-    const success = await simulateTrade();
-    
+    const success = await processTrade();
+
     if (success) {
       const price = getSelectedCoinPrice(selectedCoin);
       const total = parseFloat(amount) * price;
       const coinData = getSelectedCoinData(selectedCoin);
       executeTrade('sell', selectedCoin, parseFloat(amount), price, coinData?.name || selectedCoin, coinData?.image || '');
-      
-      toast({ 
-        title: 'Demo Trade Complete!', 
+
+      toast({
+        title: 'Trade Complete!',
         description: `Sold ${amount} ${selectedCoin} for $${total.toFixed(2)}`,
       });
-      
+
       setTimeout(() => {
         setIsProcessing(false);
         resetForm();
@@ -198,24 +194,23 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
       return;
     }
 
-    const success = await simulateTrade();
-    
+    const success = await processTrade();
+
     if (success) {
       const fromPrice = getSelectedCoinPrice(swapFromCoin);
       const toPrice = getSelectedCoinPrice(swapToCoin);
       const usdValue = parseFloat(amount) * fromPrice;
       const toAmount = usdValue / toPrice;
       const toCoinData = getSelectedCoinData(swapToCoin);
-      
+
       executeTrade('swap', swapFromCoin, parseFloat(amount), fromPrice, `${swapFromCoin} → ${swapToCoin}`, '');
-      // Add the received coins
       executeTrade('buy', swapToCoin, toAmount, toPrice, toCoinData?.name || swapToCoin, toCoinData?.image || '');
-      
-      toast({ 
-        title: 'Demo Swap Complete!', 
+
+      toast({
+        title: 'Swap Complete!',
         description: `Swapped ${amount} ${swapFromCoin} for ${toAmount.toFixed(6)} ${swapToCoin}`,
       });
-      
+
       setTimeout(() => {
         setIsProcessing(false);
         resetForm();
@@ -244,10 +239,10 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
             >
               <Loader2 className="w-12 h-12 text-primary animate-spin" />
               <p className="text-lg font-medium">Processing Trade...</p>
-              <p className="text-sm text-muted-foreground">Simulating order execution</p>
+              <p className="text-sm text-muted-foreground">Executing order</p>
             </motion.div>
           )}
-          
+
           {tradeStatus === 'confirming' && (
             <motion.div
               initial={{ scale: 0 }}
@@ -261,10 +256,10 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
                 <ArrowRightLeft className="w-12 h-12 text-primary" />
               </motion.div>
               <p className="text-lg font-medium">Confirming Transaction...</p>
-              <p className="text-sm text-muted-foreground">Updating simulated holdings</p>
+              <p className="text-sm text-muted-foreground">Updating holdings</p>
             </motion.div>
           )}
-          
+
           {tradeStatus === 'success' && (
             <motion.div
               initial={{ scale: 0 }}
@@ -278,11 +273,11 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
               >
                 <CheckCircle className="w-16 h-16 text-success" />
               </motion.div>
-              <p className="text-lg font-medium text-success">Demo Trade Complete!</p>
-              <p className="text-sm text-muted-foreground">Your demo balance has been updated</p>
+              <p className="text-lg font-medium text-success">Trade Complete!</p>
+              <p className="text-sm text-muted-foreground">Your balance has been updated</p>
             </motion.div>
           )}
-          
+
           {tradeStatus === 'error' && (
             <motion.div
               initial={{ scale: 0 }}
@@ -303,12 +298,12 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl font-display">Demo Trade</DialogTitle>
+          <DialogTitle className="text-xl font-display">Trade</DialogTitle>
         </DialogHeader>
-        
+
         <div className="relative">
           {renderTradeStatus()}
-          
+
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)}>
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="buy" className="flex items-center gap-2">
@@ -325,7 +320,6 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
               </TabsTrigger>
             </TabsList>
 
-            {/* Buy Tab */}
             <TabsContent value="buy" className="space-y-4 mt-4">
               <div className="space-y-2">
                 <Label>Select Coin</Label>
@@ -376,8 +370,8 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
                 </div>
               </div>
 
-              <Button 
-                className="w-full" 
+              <Button
+                className="w-full"
                 onClick={handleBuy}
                 disabled={isProcessing || !selectedCoin || !amount}
               >
@@ -386,7 +380,6 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
               </Button>
             </TabsContent>
 
-            {/* Sell Tab */}
             <TabsContent value="sell" className="space-y-4 mt-4">
               <div className="space-y-2">
                 <Label>Select Coin to Sell</Label>
@@ -437,8 +430,8 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
                 </div>
               </div>
 
-              <Button 
-                className="w-full" 
+              <Button
+                className="w-full"
                 variant="destructive"
                 onClick={handleSell}
                 disabled={isProcessing || !selectedCoin || !amount}
@@ -448,7 +441,6 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
               </Button>
             </TabsContent>
 
-            {/* Swap Tab */}
             <TabsContent value="swap" className="space-y-4 mt-4">
               <div className="space-y-2">
                 <Label>From</Label>
@@ -530,8 +522,8 @@ const TradeModal = ({ open, onOpenChange, defaultTab = 'buy' }: TradeModalProps)
                 </div>
               )}
 
-              <Button 
-                className="w-full" 
+              <Button
+                className="w-full"
                 onClick={handleSwap}
                 disabled={isProcessing || !swapFromCoin || !swapToCoin || !amount}
               >

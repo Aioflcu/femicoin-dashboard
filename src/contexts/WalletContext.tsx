@@ -1,4 +1,4 @@
-import { simulateWithdrawal } from '@/lib/demo-wallet';
+import { withdrawFunds } from '@/lib/wallet';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 export interface Transaction {
@@ -52,7 +52,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const totalBalance = balances.reduce((sum, b) => sum + b.usdValue, 0);
 
   const withdraw = (coin: string, amount: number) => {
-    const result = simulateWithdrawal(balances, coin, amount);
+    const result = withdrawFunds(balances, coin, amount);
     if (!result) return false;
     setBalances(result.balances);
     setTransactions(prev => [result.transaction, ...prev]);
