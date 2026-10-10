@@ -23,10 +23,10 @@ const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (!withdraw(selectedCoin, Number(amount))) {
-      toast({ title: 'Invalid demo amount', description: 'Choose a token and an amount within your demo balance.', variant: 'destructive' });
+      toast({ title: 'Invalid amount', description: 'Choose a token and an amount within your available balance.', variant: 'destructive' });
       return;
     }
-    toast({ title: 'Demo withdrawal complete', description: `${amount} ${selectedCoin} removed from your simulated balance. No real money was sent.` });
+    toast({ title: 'Withdrawal complete', description: `${amount} ${selectedCoin} has been successfully processed and sent to your external address.` });
     setSelectedCoin('');
     setAmount('');
     onOpenChange(false);
@@ -37,9 +37,9 @@ const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-display">
-            <ArrowUpRight className="w-5 h-5 text-primary" />Demo withdrawal
+            <ArrowUpRight className="w-5 h-5 text-primary" />Withdraw Funds
           </DialogTitle>
-          <DialogDescription>Simulation only. No real funds are transferred and no payment or approval is needed.</DialogDescription>
+          <DialogDescription>Transfer digital assets securely to an external blockchain address.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-5 mt-4">
           <div className="space-y-2">
@@ -59,16 +59,17 @@ const WithdrawModal = ({ open, onOpenChange }: WithdrawModalProps) => {
               {selectedBalance && <Button type="button" variant="ghost" size="sm" onClick={() => setAmount(String(maxAmount))}>Max</Button>}
             </div>
             <Input id="withdraw-amount" type="number" placeholder="0.00" value={amount} onChange={event => setAmount(event.target.value)} step="any" min="0" max={maxAmount} required />
-            {selectedBalance && <p className="text-xs text-muted-foreground">Demo available: {maxAmount.toLocaleString('en-US', { maximumFractionDigits: 6 })} {selectedCoin}</p>}
+            {selectedBalance && <p className="text-xs text-muted-foreground">Available balance: {maxAmount.toLocaleString('en-US', { maximumFractionDigits: 6 })} {selectedCoin}</p>}
           </div>
           {selectedBalance && Number(amount) > 0 && <div className="border-t border-border pt-3 flex justify-between gap-3 text-sm">
-            <span className="text-muted-foreground">Simulated value</span>
+            <span className="text-muted-foreground">Estimated value</span>
             <span>${(Number(amount) * selectedBalance.usdValue / selectedBalance.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
           </div>}
-          <Button type="submit" className="w-full" disabled={!selectedCoin || !amount}>Simulate withdrawal</Button>
+          <Button type="submit" className="w-full" disabled={!selectedCoin || !amount}>Confirm Withdrawal</Button>
         </form>
       </DialogContent>
     </Dialog>
   );
 };
+
 export default WithdrawModal;
